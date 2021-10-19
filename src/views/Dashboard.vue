@@ -1,7 +1,4 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
   <h1>The sidebar is {{ collapsed ? 'closed' : 'open' }}</h1>
   <button @click="toggleSidebar">Toggle Sidebar</button>
 </template>
