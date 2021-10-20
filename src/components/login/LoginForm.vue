@@ -5,17 +5,17 @@
 
         <div class="form-group">
            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="Email">
+            <input type="email" id="email-input" name="email" placeholder="Email">
 
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Password">
+            <input type="password" id="password-input" name="password" placeholder="Password">
         </div>
 
         <div class="checkbox">
           <label
             ><input type="checkbox" value="remember-me" /> Remember me</label>
         </div>
-        <input type="submit" value="Submit" />
+        <button class="submit-button" @click="login()">Submit</button>
         <div>
           <router-link class="forgot-password-link" type="submit" to="/signup"
             >Forgot password?</router-link>
@@ -29,9 +29,35 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: "LoginForm",
-};
+  data(){
+      return{
+        username: '',
+        password: '',
+        error: null,
+        success: false
+      }
+  },
+      methods: {
+      login: async function() {
+        const auth = { username: document.getElementById('email-input').value, password: document.getElementById('password-input').value };
+        // Correct username is 'foo' and password is 'bar'
+        const url = 'https://httpbin.org/basic-auth/foo/bar';
+        this.success = false;
+        this.error = null;
+        try {
+          const res = await axios.get(url, { auth }).then(res => res.data);
+          this.success = true;
+          console.log(res)
+        } catch (err) {
+          this.error = err.message;
+        }
+      }
+    },
+    
+}
 </script>
 
 <style scoped>
@@ -53,7 +79,7 @@ input[type="email"],input[type="password"]{
   border-radius: 4px;
   box-sizing: border-box;
 }
-input[type="submit"] {
+.submit-button{
   width: 20%;
   background-color: #42b983;
   color: white;
