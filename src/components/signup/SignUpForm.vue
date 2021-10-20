@@ -1,62 +1,72 @@
 <template>
-    <main class="form-signin">
-        <div class="card">
-               <div class="card-body">
-                    <form>
-                        <h2 class="h3 mb-3 fw-normal text-center">Please sign up</h2>
+  <main class="form-signup">
+      <form>
+        <h2 class="header">Please sign in</h2>
 
-                        <div class="form-group">
-                            <label>First Name</label>
-                            <input type="text" class="form-control form-control-lg" placeholder="First name"/>
-                        </div>
+        <div class="form-group">
+           <label>First Name</label>
+           <input type="text" class="form-control form-control-lg" placeholder="First name"/>
+            <label>Last Name</label>
+            <input type="text" class="form-control form-control-lg" placeholder="Last name"/>
+             <label>Email address</label>
+            <input type="email" class="form-control form-control-lg" placeholder="Email address" />
+            <label>Password</label>
+            <input type="password" class="form-control form-control-lg" placeholder="Password"/>
+        </div>
 
-                        <div class="form-group">
-                            <label>Last Name</label>
-                            <input type="text" class="form-control form-control-lg" placeholder="Last name"/>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Email address</label>
-                            <input type="email" class="form-control form-control-lg" placeholder="Email address" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" class="form-control form-control-lg" placeholder="Password"/>
-                        </div>                        
-
-                        <router-link class="w-100 btn btn-lg btn-primary" type="submit" to="/signin">Sign up</router-link>
-                    </form>
-                </div>
-        </div>  
-    </main>      
+       
+        <input type="submit" value="Submit" />
+        <div>
+          <router-link class="forgot-password-link" type="submit" to="/signup"
+            >Forgot password?</router-link>
+        </div>
+        <div>
+          <router-link class="sign-in-link" type="submit" to="/signup"
+            >Already have an account? Sign in</router-link>
+        </div>
+      </form>
+  </main>
 </template>
 
 <script>
-    export default {
-        data() {
-            return {}
-        },
-        methods: {
-            
-        }
-    }
+export default {
+  name: "SignUpForm",
+};
 </script>
 
 <style scoped>
-    /* body {
-        display: flex;
-        padding-top: 60px;
-        padding-bottom: 60px;        
-        align-items: center;
-        background-color: #f6f6f6;
-    } */
-    .form-signin {
-        width: 100%;
-        max-width: 450px;
-        margin: auto;
-    }
-    /* label {
-        font-weight: 600;
-    } */
+.form-signup {
+  width: 50%;
+  padding-top: 30px;
+  padding-bottom: 60px;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #f6f9f6;
+}
+input {
+  width: 70%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+input[type="submit"] {
+  width: 20%;
+  background-color: #42b983;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+label{
+  display: block;
+  position: relative;
+}
+
 </style>
+

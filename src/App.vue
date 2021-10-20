@@ -11,7 +11,7 @@ export default {
 
 <template>
   <Sidebar />
-  <div :style="{ 'margin-left': sidebarWidth }">
+  <div class="content" :style="{ 'margin-left': sidebarWidth }">
     <router-view />
   </div>
 </template>
@@ -23,6 +23,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  transition: 0.3s ease;
+  
 }
 
 #nav {
@@ -37,4 +39,9 @@ export default {
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+
+.content {
+  transition: 0.3s ease;
+}
+
 </style>
