@@ -1,63 +1,71 @@
 <template>
   <main class="form-signin">
-      <form>
-        <h2 class="header">Please sign in</h2>
+    <form>
+      <h2 class="header">Please sign in</h2>
 
-        <div class="form-group">
-           <label for="email">Email</label>
-            <input type="email" id="email-input" name="email" placeholder="Email">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email-input" name="email" placeholder="Email" />
 
-            <label for="password">Password</label>
-            <input type="password" id="password-input" name="password" placeholder="Password">
-        </div>
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password-input"
+          name="password"
+          placeholder="Password"
+        />
+      </div>
 
-        <div class="checkbox">
-          <label
-            ><input type="checkbox" value="remember-me" /> Remember me</label>
-        </div>
-        <button class="submit-button" @click="login()">Submit</button>
-        <div>
-          <router-link class="forgot-password-link" type="submit" to="/signup"
-            >Forgot password?</router-link>
-        </div>
-        <div>
-          <router-link class="sign-in-link" type="submit" to="/signup"
-            >Don't have an account? Sign up</router-link>
-        </div>
-      </form>
+      <div class="checkbox">
+        <label><input type="checkbox" value="remember-me" /> Remember me</label>
+      </div>
+      <button class="submit-button" @click.prevent="sign_in()">Submit</button>
+      <div>
+        <router-link class="forgot-password-link" type="submit" to="/signup"
+          >Forgot password?</router-link
+        >
+      </div>
+      <div>
+        <router-link class="sign-in-link" type="submit" to="/signup"
+          >Don't have an account? Sign up</router-link
+        >
+      </div>
+    </form>
   </main>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "LoginForm",
-  data(){
-      return{
-        username: '',
-        password: '',
-        error: null,
-        success: false
-      }
+  data() {
+    return {
+      email: "",
+      password: "",
+      error: null,
+      success: false,
+    };
   },
-      methods: {
-      login: async function() {
-        const auth = { username: document.getElementById('email-input').value, password: document.getElementById('password-input').value };
-        // Correct username is 'foo' and password is 'bar'
-        const url = 'https://httpbin.org/basic-auth/foo/bar';
-        this.success = false;
-        this.error = null;
-        try {
-          const res = await axios.get(url, { auth }).then(res => res.data);
-          this.success = true;
-          console.log(res)
-        } catch (err) {
-          this.error = err.message;
-        }
-      }
+  methods: {
+    sign_in: async function () {
+      // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+      // // At request level
+      // const agent = new https.Agent({
+      //   rejectUnauthorized: false
+      // });
+      const email = document.getElementById("email-input").value;
+      const password = document.getElementById("password-input").value;
+      const url = "http://localhost:8080/auth/login";
+      this.success = false;
+      this.error = null;
+      const res = await axios.post(url, {
+        email,
+        password,
+      });
+      console.log(res.data);
     },
-    
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -70,7 +78,8 @@ export default {
   margin-right: auto;
   background-color: #f6f9f6;
 }
-input[type="email"],input[type="password"]{
+input[type="email"],
+input[type="password"] {
   width: 70%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -79,7 +88,7 @@ input[type="email"],input[type="password"]{
   border-radius: 4px;
   box-sizing: border-box;
 }
-.submit-button{
+.submit-button {
   width: 20%;
   background-color: #42b983;
   color: white;
@@ -89,10 +98,8 @@ input[type="email"],input[type="password"]{
   cursor: pointer;
 }
 
-label{
+label {
   display: block;
   position: relative;
 }
-
 </style>
-

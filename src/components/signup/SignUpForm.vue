@@ -1,60 +1,66 @@
 <template>
   <main class="form-signup">
-      <form>
-        <h2 class="header">Please sign in</h2>
+    <form>
+      <h2 class="header">Please sign in</h2>
 
-        <div class="form-group">
-            <label>Nickname</label>
-            <input type="text" id="nickname-input" placeholder="Nickname"/>
-            <label>Email address</label>
-            <input type="email" id="email-input" placeholder="Email address" />
-            <label>Password</label>
-            <input type="password" id="password-input" placeholder="Password"/>
-        </div>
-         <button class="submit-button" @click="signup()">Submit</button>
-        <div>
-          <router-link class="forgot-password-link" type="submit" to="/signup"
-            >Forgot password?</router-link>
-        </div>
-        <div>
-          <router-link class="sign-in-link" type="submit" to="/login"
-            >Already have an account? Sign in</router-link>
-        </div>
-      </form>
+      <div class="form-group">
+        <label>Nickname</label>
+        <input type="text" id="nickname-input" placeholder="Nickname" />
+        <label>Email address</label>
+        <input type="email" id="email-input" placeholder="Email address" />
+        <label>Password</label>
+        <input type="password" id="password-input" placeholder="Password" />
+      </div>
+      <button class="submit-button" @click.prevent="signup()">Submit</button>
+      <div>
+        <router-link class="forgot-password-link" type="submit" to="/signup"
+          >Forgot password?</router-link
+        >
+      </div>
+      <div>
+        <router-link class="sign-in-link" type="submit" to="/login"
+          >Already have an account? Sign in</router-link
+        >
+      </div>
+    </form>
   </main>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "SignUpForm",
-  data(){
-      return{
-        nickname: '',
-        username: '',
-        password: '',
-        error: null,
-        success: false
-      }
+  data() {
+    return {
+      nickname: "",
+      username: "",
+      password: "",
+      error: null,
+      success: false,
+    };
   },
-      methods: {
-      login: async function() {
-        const auth = {nickname: document.getElementById('nickname-input').value, email: document.getElementById('email-input').value, password: document.getElementById('password-input').value };
-        // Correct username is 'foo' and password is 'bar'
-        const url = 'https://httpbin.org/basic-auth/foo/bar';
-        this.success = false;
-        this.error = null;
-        try {
-          const res = await axios.post(url, {auth}).then(res => res.data);;
-          this.success = true;
-          console.log(res)
-        } catch (err) {
-          this.error = err.message;
-        }
-      }
+  methods: {
+    signup: async function () {
+      // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+      // // At request level
+      // const agent = new https.Agent({
+      //   rejectUnauthorized: false
+      // });
+      const nickname = document.getElementById("nickname-input").value;
+      const email = document.getElementById("email-input").value;
+      const password = document.getElementById("password-input").value;
+      const url = "http://localhost:8080/auth/register";
+      this.success = false;
+      this.error = null;
+      const res = await axios.post(url, {
+        nickname,
+        email,
+        password
+      });
+      console.log(res.data);
     },
-    
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -86,10 +92,8 @@ input {
   cursor: pointer;
 }
 
-label{
+label {
   display: block;
   position: relative;
 }
-
 </style>
-
