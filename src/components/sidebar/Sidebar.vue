@@ -1,14 +1,14 @@
 <script>
-import SidebarLink from './SidebarLink'
-import { collapsed, toggleSidebar, sidebarWidth } from './state'
+import SidebarLink from "./SidebarLink";
+import { collapsed, toggleSidebar, sidebarWidth } from "./state";
 
 export default {
   props: {},
   components: { SidebarLink },
   setup() {
-    return { collapsed, toggleSidebar, sidebarWidth }
-  }
-}
+    return { collapsed, toggleSidebar, sidebarWidth };
+  },
+};
 </script>
 
 <template>
@@ -23,10 +23,15 @@ export default {
     </h1>
 
     <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
-    <SidebarLink to="/dashboard" icon="fas fa-columns">Dashboard</SidebarLink>
     <SidebarLink to="/login" icon="fas fa-sign-in-alt">Login</SidebarLink>
     <SidebarLink to="/signup" icon="fas fa-user-plus">Register</SidebarLink>
-    <SidebarLink to="/about" icon="fas fa-info">About</SidebarLink>
+    <SidebarLink to="/leaderboard" icon="fas fa-crown">Leaderboard</SidebarLink>
+    <SidebarLink to="/myprogress" icon="fas fa-chart-line"
+      >My progress</SidebarLink
+    >
+    <SidebarLink to="/myprofile" icon="fas fa-address-card"
+      >My Profile</SidebarLink
+    >
 
     <span
       class="collapse-icon"
@@ -66,7 +71,7 @@ export default {
 }
 
 .sidebar h1 {
-  height: 3.0em;
+  height: 3em;
 }
 
 .collapse-icon {

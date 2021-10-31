@@ -8,14 +8,19 @@ const routes = [
     component: Home
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: () => import('../views/Dashboard.vue')
+    path: '/leaderboard',
+    name: 'Leaderboard',
+    component: () => import('../views/Leaderboard.vue')
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import('../views/About.vue')
+    path: '/myprofile',
+    name: 'MyProfile',
+    component: () => import('../views/MyProfile.vue')
+  },
+  {
+    path: '/myprogress',
+    name: 'MyProgress',
+    component: () => import('../views/MyProgress.vue')
   },
   { 
     path: '/signup',
@@ -26,6 +31,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login.vue')
+  },
+  { 
+    path: '/resetpassword',
+    name: 'ResetPassword',
+    component: () => import('../views/ResetPassword.vue')
   }
 ]
 

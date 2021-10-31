@@ -1,17 +1,16 @@
 <script>
-import { collapsed, toggleSidebar } from '@/components/sidebar/state'
-import SignUp from '@/components/signup/SignUpForm'
+import { collapsed, toggleSidebar } from "@/components/sidebar/state";
+import SignUpForm from "@/components/signup/SignUpForm";
 
 export default {
-  components: { SignUp },
+  components: { SignUpForm },
   setup() {
-    return { collapsed, toggleSidebar }
-  }
-}
+    return { collapsed, toggleSidebar };
+  },
+};
 </script>
 
 <template>
   <h1>SignUp form</h1>
-  <SignUp />
+  <SignUpForm />
 </template>
-

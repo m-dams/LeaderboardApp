@@ -55,7 +55,7 @@ export default {
       const res = await axios.post(url, {
         nickname,
         email,
-        password
+        password,
       });
       console.log(res.data);
     },

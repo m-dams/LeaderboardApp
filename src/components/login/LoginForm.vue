@@ -19,6 +19,10 @@
       <div class="checkbox">
         <label><input type="checkbox" value="remember-me" /> Remember me</label>
       </div>
+      <div v-if="error">
+        {{ error }}
+      </div>
+      <div v-if="success" id="success">Logged in Successfully</div>
       <button class="submit-button" @click.prevent="sign_in()">Submit</button>
       <div>
         <router-link class="forgot-password-link" type="submit" to="/signup"
@@ -36,6 +40,7 @@
 
 <script>
 import axios from "axios";
+import router from "../../router";
 export default {
   name: "LoginForm",
   data() {
@@ -58,11 +63,44 @@ export default {
       const url = "http://localhost:8080/auth/login";
       this.success = false;
       this.error = null;
-      const res = await axios.post(url, {
-        email,
-        password,
-      });
-      console.log(res.data);
+      try {
+        const res = await axios
+          .post(url, {
+            email,
+            password,
+          })
+          .then((response) => {
+            if (response.data.accessToken) {
+              localStorage.setItem("user", JSON.stringify(response.data));
+            }
+          });
+        this.success = true;
+        console.log(res.data);
+      } catch (error) {
+        {
+          this.error = error.message;
+          if (error.response) {
+            // get response with a status code not in range 2xx
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // no response
+            console.log(error.request);
+            // instance of XMLHttpRequest in the browser
+            // instance ofhttp.ClientRequest in node.js
+          } else {
+            // Something wrong in setting up the request
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
+        }
+      }
+
+      router.push("Home");
+    },
+    logout() {
+      localStorage.removeItem("user");
     },
   },
 };
