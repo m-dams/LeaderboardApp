@@ -1,9 +1,7 @@
 <template>
   <div class="myprogress">
     <h1>This is My Progress page</h1>
-    <button class="notification-button" @click.prevent="push_notification()">
-      Notification
-    </button>
+    <button class="notification-button">Notification</button>
   </div>
 </template>
 
@@ -18,17 +16,6 @@ export default {
       success: false,
     };
   },
-  methods: {
-    push_notification: function () {
-      this.$notify(
-        {
-          group: "foo",
-          title: "Success",
-          text: "Your account was registered!",
-        },
-        2000
-      ); // 2s
-    },
-  },
+  methods: {},
 };
 </script>

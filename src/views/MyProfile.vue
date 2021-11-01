@@ -6,14 +6,6 @@
 
 //
 <script>
-// this.$notify(
-//   {
-//     group: "foo",
-//     title: "Success",
-//     text: "Your account was registered!",
-//   },
-//   2000
-// ); // 2s
 export default {
   name: "About",
 };

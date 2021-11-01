@@ -97,7 +97,7 @@ export default {
         }
       }
 
-      router.push("Home");
+      router.push("Leaderboard");
     },
     logout() {
       localStorage.removeItem("user");
