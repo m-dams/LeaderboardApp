@@ -1,6 +1,6 @@
 <script>
 import { collapsed, toggleSidebar } from "@/components/sidebar/state";
-import SignUpForm from "@/components/signup/SignUpForm";
+import SignUpForm from "@/components/signup/SignUpFormTW";
 
 export default {
   components: { SignUpForm },
@@ -11,6 +11,11 @@ export default {
 </script>
 
 <template>
-  <h1>SignUp form</h1>
   <SignUpForm />
 </template>
+
+<style scoped>
+h1 {
+  margin-top: 100px;
+}
+</style>

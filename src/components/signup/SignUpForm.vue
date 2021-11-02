@@ -1,8 +1,6 @@
 <template>
   <main class="form-signup">
     <form>
-      <h2 class="header">Please sign in</h2>
-
       <div class="form-group">
         <label>Nickname</label>
         <input type="text" id="nickname-input" placeholder="Nickname" />

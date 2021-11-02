@@ -1,6 +1,6 @@
 <script>
 import { collapsed, toggleSidebar } from "@/components/sidebar/state";
-import Login from "@/components/login/LoginForm";
+import Login from "@/components/login/LoginFormTW";
 
 export default {
   components: { Login },
@@ -11,6 +11,5 @@ export default {
 </script>
 
 <template>
-  <h1>Login form</h1>
   <Login />
 </template>

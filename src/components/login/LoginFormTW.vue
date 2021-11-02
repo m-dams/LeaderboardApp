@@ -1,13 +1,11 @@
 <template>
   <div>
-    <navbar-component></navbar-component>
     <main>
-      <section class="absolute w-full h-full">
+      <section class="fixed w-11/12 h-full">
         <div
-          class="absolute top-0 w-full h-full bg-gray-900"
+          class="absolute top-0 w-full h-full bg-white-500"
           style="background-size: 100%; background-repeat: no-repeat"
-          :style="{
-          }"
+          :style="{}"
         ></div>
         <div class="container mx-auto px-4 h-full">
           <div class="flex content-center items-center justify-center h-full">
@@ -22,81 +20,20 @@
                   mb-6
                   shadow-lg
                   rounded-lg
-                  bg-gray-300
+                  bg-green-300
                   border-0
                 "
               >
                 <div class="rounded-t mb-0 px-6 py-6">
                   <div class="text-center mb-3">
                     <h6 class="text-gray-600 text-sm font-bold">
-                      Sign in with
+                      Sign in with credentials
                     </h6>
                   </div>
-                  <div class="btn-wrapper text-center">
-                    <button
-                      class="
-                        bg-white
-                        active:bg-gray-100
-                        text-gray-800
-                        font-normal
-                        px-4
-                        py-2
-                        rounded
-                        outline-none
-                        focus:outline-none
-                        mr-2
-                        mb-1
-                        uppercase
-                        shadow
-                        hover:shadow-md
-                        inline-flex
-                        items-center
-                        font-bold
-                        text-xs
-                      "
-                      type="button"
-                      style="transition: all 0.15s ease 0s"
-                    >
-                      <img
-                       
-                        class="w-5 mr-1"
-                
-                      />Github</button
-                    ><button
-                      class="
-                        bg-white
-                        active:bg-gray-100
-                        text-gray-800
-                        font-normal
-                        px-4
-                        py-2
-                        rounded
-                        outline-none
-                        focus:outline-none
-                        mr-1
-                        mb-1
-                        uppercase
-                        shadow
-                        hover:shadow-md
-                        inline-flex
-                        items-center
-                        font-bold
-                        text-xs
-                      "
-                      type="button"
-                      style="transition: all 0.15s ease 0s"
-                    >
-                      <img
-                        class="w-5 mr-1"
-                      />Google
-                    </button>
-                  </div>
+                  <div class="btn-wrapper text-center"></div>
                   <hr class="mt-6 border-b-1 border-gray-400" />
                 </div>
                 <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-                  <div class="text-gray-500 text-center mb-3 font-bold">
-                    <small>Or sign in with credentials</small>
-                  </div>
                   <form>
                     <div class="relative w-full mb-3">
                       <label
@@ -209,12 +146,12 @@
               </div>
               <div class="flex flex-wrap mt-6">
                 <div class="w-1/2">
-                  <a href="#pablo" class="text-gray-300"
+                  <a href="#pablo" class="text-black-300"
                     ><small>Forgot password?</small></a
                   >
                 </div>
-                <div class="w-1/2 text-right">
-                  <a href="#pablo" class="text-gray-300"
+                <div class="w-1/3 text-right">
+                  <a href="#pablo" class="text-black-300"
                     ><small>Create new account</small></a
                   >
                 </div>
@@ -227,10 +164,8 @@
   </div>
 </template>
 <script>
-
 export default {
   name: "login-page",
-  components: {
-  },
+  components: {},
 };
 </script>

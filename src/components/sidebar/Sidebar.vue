@@ -62,7 +62,7 @@ export default {
   top: 0;
   left: 0;
   bottom: 0;
-  padding: 0.5em;
+  padding: 0.7em;
 
   transition: 0.3s ease;
 
@@ -71,7 +71,8 @@ export default {
 }
 
 .sidebar h1 {
-  height: 3em;
+  font-weight: 800;
+  height: 5em;
 }
 
 .collapse-icon {

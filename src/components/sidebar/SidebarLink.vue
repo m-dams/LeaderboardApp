@@ -44,13 +44,13 @@ export default {
 
   cursor: pointer;
   position: relative;
-  font-weight: 400;
+  font-weight: 500;
   user-select: none;
 
   margin: 0.1em 0;
   padding: 0.4em;
   border-radius: 0.25em;
-  height: 1.5em;
+  height: 2.5em;
 
   color: white;
   text-decoration: none;

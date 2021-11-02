@@ -1,8 +1,6 @@
 <template>
   <main class="form-signin">
     <form>
-      <h2 class="header">Please sign in</h2>
-
       <div class="form-group">
         <label for="email">Email</label>
         <input type="email" id="email-input" name="email" placeholder="Email" />
@@ -109,7 +107,7 @@ export default {
 <style scoped>
 .form-signin {
   width: 50%;
-  padding-top: 30px;
+  padding-top: 60px;
   padding-bottom: 60px;
   align-items: center;
   margin-left: auto;
