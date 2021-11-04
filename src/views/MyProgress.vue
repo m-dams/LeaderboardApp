@@ -45,8 +45,8 @@ export default {
     notify: function () {
       notify(
         {
-          group: "foo",
-          title: "Success",
+          group: "generic",
+          title: "",
           text: "Your account was registered!",
         },
         2000

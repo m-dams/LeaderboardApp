@@ -9,7 +9,7 @@
         ></div>
         <div class="container mx-auto px-4 h-full">
           <div class="flex content-center items-center justify-center h-full">
-            <div class="w-full lg:w-4/12 px-4">
+            <div class="w-full lg:w-4/12 px-4 z-10">
               <div
                 class="
                   relative
@@ -47,6 +47,7 @@
                         for="grid-password"
                         >Email</label
                       ><input
+                        id="email-input"
                         type="email"
                         class="
                           border-0
@@ -77,6 +78,7 @@
                         for="grid-password"
                         >Password</label
                       ><input
+                        id="password-input"
                         type="password"
                         class="
                           border-0
@@ -137,6 +139,7 @@
                         "
                         type="button"
                         style="transition: all 0.15s ease 0s"
+                        @click.prevent="sign_in()"
                       >
                         Sign In
                       </button>
@@ -144,13 +147,16 @@
                   </form>
                 </div>
               </div>
-              <div class="flex flex-wrap mt-6">
-                <div class="w-1/2">
+              <div class="flex flex-wrap mt-6 z-50">
+                <div class="w-1/2" @click.prevent="redirect_reset()">
                   <a href="#pablo" class="text-black-300"
                     ><small>Forgot password?</small></a
                   >
                 </div>
-                <div class="w-1/3 text-right">
+                <div
+                  class="w-1/3 text-right"
+                  @click.prevent="redirect_signup()"
+                >
                   <a href="#pablo" class="text-black-300"
                     ><small>Create new account</small></a
                   >
@@ -163,9 +169,100 @@
     </main>
   </div>
 </template>
+
 <script>
+import axios from "axios";
+import { notify } from "notiwind";
+import router from "../../router";
 export default {
   name: "login-page",
-  components: {},
+  data() {
+    return {
+      message: null,
+      verified: false,
+      token: null,
+      refreshToken: null,
+    };
+  },
+  methods: {
+    sign_in: async function () {
+      // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+      // // At request level
+      // const agent = new https.Agent({
+      //   rejectUnauthorized: false
+      // });
+      const email = document.getElementById("email-input").value;
+      const password = document.getElementById("password-input").value;
+      const url = "http://localhost:8080/auth/login";
+      console.log(email);
+      console.log(password);
+      console.log(url);
+      try {
+        await axios
+          .post(url, {
+            email,
+            password,
+          })
+          .then((response) => {
+            this.message = response.data.message;
+            this.verified = response.data.verified;
+            this.token = response.data.token;
+            this.refreshToken = response.data.refreshToken;
+
+            if (response.data.token) {
+              localStorage.setItem("user", JSON.stringify(response.data));
+            }
+          });
+
+        console.log(this.message);
+      } catch (error) {
+        console.log("error terror");
+        //   {
+        //     this.error = error.message;
+        //     if (error.response) {
+        //       // get response with a status code not in range 2xx
+        //       console.log(error.response.data);
+        //       console.log(error.response.status);
+        //       console.log(error.response.headers);
+        //     } else if (error.request) {
+        //       // no response
+        //       console.log(error.request);
+        //       // instance of XMLHttpRequest in the browser
+        //       // instance ofhttp.ClientRequest in node.js
+        //     } else {
+        //       // Something wrong in setting up the request
+        //       console.log("Error", error.message);
+        //     }
+        //     console.log(error.config);
+        //   }
+      }
+      if (this.verified == true) {
+        this.notify_success();
+        router.push("Leaderboard");
+      }
+    },
+
+    notify_success: function () {
+      notify(
+        {
+          group: "Success",
+          title: "Success",
+          text: this.message,
+        },
+        2000
+      ); // 2s
+    },
+
+    redirect_reset: function () {
+      router.push("ResetPassword");
+    },
+
+    redirect_signup: function () {
+      router.push("SignUp");
+    },
+    logout() {
+      localStorage.removeItem("user");
+    },
+  },
 };
 </script>
