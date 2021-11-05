@@ -44,10 +44,10 @@
                           font-bold
                           mb-2
                         "
-                        for="grid-password"
+                        for="grid-nickname"
                         >Nickname</label
                       ><input
-                        id="nickname-password"
+                        id="nickname-input"
                         type="text"
                         class="
                           border-0
@@ -182,89 +182,69 @@ import axios from "axios";
 import { notify } from "notiwind";
 import router from "../../router";
 export default {
-  name: "login-page",
+  name: "signup-page",
   data() {
     return {
       message: null,
-      verified: false,
+      emailVerified: false,
       token: null,
-      refreshToken: null,
+      error: null,
     };
   },
   methods: {
     sign_up: async function () {
-      // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-      // // At request level
-      // const agent = new https.Agent({
-      //   rejectUnauthorized: false
-      // });
+      const nickname = document.getElementById("nickname-input").value;
       const email = document.getElementById("email-input").value;
       const password = document.getElementById("password-input").value;
-      const url = "http://localhost:8080/auth/login";
-      console.log(email);
-      console.log(password);
-      console.log(url);
-      try {
-        await axios
-          .post(url, {
-            email,
-            password,
-          })
-          .then((response) => {
-            this.message = response.data.message;
-            this.verified = response.data.verified;
-            this.token = response.data.token;
-            this.refreshToken = response.data.refreshToken;
+      const url = "http://localhost:8080/auth/register";
 
-            if (response.data.token) {
-              localStorage.setItem("user", JSON.stringify(response.data));
-            }
-          });
-
-        console.log(this.message);
-      } catch (error) {
-        console.log("error terror");
-        //   {
-        //     this.error = error.message;
-        //     if (error.response) {
-        //       // get response with a status code not in range 2xx
-        //       console.log(error.response.data);
-        //       console.log(error.response.status);
-        //       console.log(error.response.headers);
-        //     } else if (error.request) {
-        //       // no response
-        //       console.log(error.request);
-        //       // instance of XMLHttpRequest in the browser
-        //       // instance ofhttp.ClientRequest in node.js
-        //     } else {
-        //       // Something wrong in setting up the request
-        //       console.log("Error", error.message);
-        //     }
-        //     console.log(error.config);
-        //   }
-      }
-      if (this.verified == true) {
-        this.notify_success();
-        router.push("Leaderboard");
-      }
+      await axios
+        .post(url, {
+          nickname,
+          email,
+          password,
+        })
+        .then((response) => {
+          this.message = "Your account has been successuly registered";
+          this.emailVerified = response.data.emailVerified;
+          this.token = response.data.token;
+          if (response.data.token) {
+            localStorage.setItem("user", JSON.stringify(response.data));
+          }
+          this.notify_success(this.message);
+          router.push("Leaderboard");
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.log(error.response.data.error);
+            this.notify_error(error.response.data.error);
+          }
+        });
     },
 
-    notify_success: function () {
+    notify_success: function (message) {
       notify(
         {
           group: "Success",
           title: "Success",
-          text: this.message,
+          text: message,
         },
-        2000
-      ); // 2s
+        3000
+      );
+    },
+
+    notify_error: function (message) {
+      notify(
+        {
+          group: "error",
+          title: "Error",
+          text: message,
+        },
+        3000
+      );
     },
     redirect_login: function () {
       router.push("Login");
-    },
-
-    logout() {
-      localStorage.removeItem("user");
     },
   },
 };

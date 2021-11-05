@@ -182,6 +182,7 @@ export default {
       verified: false,
       token: null,
       refreshToken: null,
+      error: null,
     };
   },
   methods: {
@@ -194,63 +195,54 @@ export default {
       const email = document.getElementById("email-input").value;
       const password = document.getElementById("password-input").value;
       const url = "http://localhost:8080/auth/login";
-      console.log(email);
-      console.log(password);
-      console.log(url);
-      try {
-        await axios
-          .post(url, {
-            email,
-            password,
-          })
-          .then((response) => {
-            this.message = response.data.message;
-            this.verified = response.data.verified;
-            this.token = response.data.token;
-            this.refreshToken = response.data.refreshToken;
 
-            if (response.data.token) {
-              localStorage.setItem("user", JSON.stringify(response.data));
-            }
-          });
+      await axios
+        .post(url, {
+          email,
+          password,
+        })
+        .then((response) => {
+          this.message = response.data.message;
+          this.verified = response.data.verified;
+          this.token = response.data.token;
+          this.refreshToken = response.data.refreshToken;
+          if (response.data.token) {
+            localStorage.setItem("user", JSON.stringify(response.data));
+          }
+          this.notify_success(this.message);
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.log(error.response.data.error);
+            this.notify_error(error.response.data.error);
+          }
+        });
 
-        console.log(this.message);
-      } catch (error) {
-        console.log("error terror");
-        //   {
-        //     this.error = error.message;
-        //     if (error.response) {
-        //       // get response with a status code not in range 2xx
-        //       console.log(error.response.data);
-        //       console.log(error.response.status);
-        //       console.log(error.response.headers);
-        //     } else if (error.request) {
-        //       // no response
-        //       console.log(error.request);
-        //       // instance of XMLHttpRequest in the browser
-        //       // instance ofhttp.ClientRequest in node.js
-        //     } else {
-        //       // Something wrong in setting up the request
-        //       console.log("Error", error.message);
-        //     }
-        //     console.log(error.config);
-        //   }
-      }
       if (this.verified == true) {
-        this.notify_success();
         router.push("Leaderboard");
       }
     },
 
-    notify_success: function () {
+    notify_success: function (message) {
       notify(
         {
           group: "Success",
           title: "Success",
-          text: this.message,
+          text: message,
         },
-        2000
-      ); // 2s
+        3000
+      );
+    },
+
+    notify_error: function (message) {
+      notify(
+        {
+          group: "error",
+          title: "Error",
+          text: message,
+        },
+        3000
+      );
     },
 
     redirect_reset: function () {
