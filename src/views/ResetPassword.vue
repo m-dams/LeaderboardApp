@@ -159,7 +159,7 @@ export default {
           text: this.message,
         },
         2000
-      ); // 2s
+      );
     },
     redirect_login: function () {
       router.push("Login");

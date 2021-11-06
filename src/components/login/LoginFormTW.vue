@@ -20,7 +20,7 @@
                   mb-6
                   shadow-lg
                   rounded-lg
-                  bg-green-300
+                  bg-secondary
                   border-0
                 "
               >
@@ -120,7 +120,7 @@
                     <div class="text-center mt-6">
                       <button
                         class="
-                          bg-gray-900
+                          bg-danger
                           text-white
                           active:bg-gray-700
                           text-sm

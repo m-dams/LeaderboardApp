@@ -6,3 +6,4 @@ import Notifications from 'notiwind'
 import './index.css'
 
 createApp(App).use(router).use(Notifications).mount("#app");
+

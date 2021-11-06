@@ -50,7 +50,7 @@ export default {
           text: "Your account was registered!",
         },
         2000
-      ); // 2s
+      );
     },
   },
 };
