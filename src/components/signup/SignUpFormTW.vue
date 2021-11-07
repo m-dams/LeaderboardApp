@@ -20,7 +20,7 @@
                   mb-6
                   shadow-lg
                   rounded-lg
-                  bg-secondary
+                  bg-green-300
                   border-0
                 "
               >
@@ -132,7 +132,7 @@
                     <div class="text-center mt-6">
                       <button
                         class="
-                          bg-danger
+                          bg-gray-900
                           text-white
                           active:bg-gray-700
                           text-sm
@@ -178,7 +178,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import UserService from "@/services/UserService.js";
 import { notify } from "notiwind";
 import router from "../../router";
 export default {
@@ -196,14 +196,8 @@ export default {
       const nickname = document.getElementById("nickname-input").value;
       const email = document.getElementById("email-input").value;
       const password = document.getElementById("password-input").value;
-      const url = "http://localhost:8080/auth/register";
 
-      await axios
-        .post(url, {
-          nickname,
-          email,
-          password,
-        })
+      await UserService.postRegister(nickname, email, password)
         .then((response) => {
           this.message = "Your account has been successuly registered";
           this.emailVerified = response.data.emailVerified;
@@ -212,7 +206,7 @@ export default {
             localStorage.setItem("user", JSON.stringify(response.data));
           }
           this.notify_success(this.message);
-          router.push("Leaderboard");
+          router.push("Login");
         })
         .catch((error) => {
           if (error.response) {

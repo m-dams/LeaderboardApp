@@ -3,6 +3,7 @@
     <header class="page__header">
       <h1 class="page__title">Leaderboard</h1>
     </header>
+    <Searchbar />
     <section class="board">
       <div class="container container--narrow" v-cloak>
         <div class="loader v-cloak-visible">
@@ -27,7 +28,7 @@
                 :class-names="camperClass"
                 aria-label="Sort by username"
                 @click="sort('username')"
-                >Camper</SortButton
+                >Nickname</SortButton
               >
             </div>
             <div
@@ -139,9 +140,10 @@
 import Modal from "./Modal";
 // import Rank from 'Rank';
 import SortButton from "./SortButton";
+import Searchbar from "../searchbar/Searchbar.vue";
 export default {
   name: "index",
-  components: { Modal, SortButton },
+  components: { Modal, SortButton, Searchbar },
   methods: {},
 };
 </script>

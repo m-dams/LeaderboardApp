@@ -144,7 +144,6 @@
   </div>
 </template>
 <script>
-// import axios from "axios";
 import { notify } from "notiwind";
 import router from "../router";
 export default {

@@ -20,7 +20,7 @@
                   mb-6
                   shadow-lg
                   rounded-lg
-                  bg-secondary
+                  bg-green-300
                   border-0
                 "
               >
@@ -120,7 +120,7 @@
                     <div class="text-center mt-6">
                       <button
                         class="
-                          bg-danger
+                          bg-gray-900
                           text-white
                           active:bg-gray-700
                           text-sm
@@ -171,7 +171,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import UserService from "@/services/UserService.js";
 import { notify } from "notiwind";
 import router from "../../router";
 export default {
@@ -187,27 +187,24 @@ export default {
   },
   methods: {
     sign_in: async function () {
-      // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-      // // At request level
-      // const agent = new https.Agent({
-      //   rejectUnauthorized: false
-      // });
       const email = document.getElementById("email-input").value;
       const password = document.getElementById("password-input").value;
-      const url = "http://localhost:8080/auth/login";
 
-      await axios
-        .post(url, {
-          email,
-          password,
-        })
+      await UserService.postLogin(email, password)
         .then((response) => {
           this.message = response.data.message;
           this.verified = response.data.verified;
           this.token = response.data.token;
           this.refreshToken = response.data.refreshToken;
           if (response.data.token) {
-            localStorage.setItem("user", JSON.stringify(response.data));
+            localStorage.setItem("token", JSON.stringify(response.data.token));
+            console.log(localStorage.getItem("token"));
+          }
+          if (response.data.refreshToken) {
+            localStorage.setItem(
+              "refreshToken",
+              JSON.stringify(response.data.refreshToken)
+            );
           }
           this.notify_success(this.message);
         })
