@@ -31,7 +31,7 @@
               <SortButton
                 :class-names="camperClass"
                 aria-label="Sort by username"
-                @click="sort('username')"
+                @click="sort('nickname')"
                 >Nickname</SortButton
               >
             </div>
@@ -94,17 +94,10 @@
     <Modal v-if="showModal" aria-label="User card" @close="showModal = false">
       <div class="user">
         <div class="user__avatar user__avatar--large">
-          <img :src="campers[activeCamper].img" />
+          <img src="@/assets/default_profile_picture.png" />
         </div>
         <h3 class="user__name user__name--large">
-          <a
-            :href="fccLink"
-            :title="fccLinkTitle"
-            :aria-label="fccLinkTitle"
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-            >{{ campers[activeCamper].username }}</a
-          >
+          <a>{{ users.nickname }}</a>
         </h3>
         <div class="user__ranks">
           <div class="rank">
@@ -123,7 +116,6 @@
       </div>
     </Modal>
   </div>
-  <!-- <script src="https://unpkg.com/vue/dist/vue.js"></script> -->
 </template>
 >
 
@@ -159,6 +151,29 @@ export default {
       this.showModal = true;
       this.activeCamper = i;
     },
+    updateRanks: function (campers) {
+      const sortedByAlltime = campers
+        .slice()
+        .sort((a, b) => b.alltime - a.alltime);
+      const ranks = campers
+        .slice()
+        .map(
+          (camper) =>
+            sortedByAlltime.findIndex((x) => x.alltime === camper.alltime) + 1
+        );
+
+      return campers.map((camper, index) =>
+        Object.assign({}, camper, {
+          rank: {
+            alltime: ranks[index],
+            recent: index + 1,
+          },
+        })
+      );
+    },
+    toggleModal: function () {
+      this.showModal = !this.showModal;
+    },
     handleKeydown: function (e) {
       if (!this.showModal || e.key !== "Escape") {
         return;
@@ -169,8 +184,9 @@ export default {
       el.style.opacity = 0;
       el.style.transform = "translateX(-10%)";
     },
-    enter: function (el) {
-      const delay = el.dataset.index > 11 ? 2200 : el.dataset.index * 200;
+    /* eslint-disable */
+    enter: function (el, done) {
+      const delay = el.dataset.index > 10 ? 2200 : el.dataset.index * 200;
       setTimeout(function () {
         el.style.opacity = 1;
         el.style.transform = "translateX(0)";
@@ -193,21 +209,21 @@ export default {
   },
 
   computed: {
-    sortedList: function () {
-      return this.campers.sort((a, b) => {
-        if (this.sortBy === "username") {
-          return a.username.toUpperCase() > b.username.toUpperCase()
-            ? this.order
-            : this.order * -1;
-        }
+    // sortedList: function () {
+    //   return this.campers.sort((a, b) => {
+    //     if (this.sortBy === "nickname") {
+    //       return a.nickname.toUpperCase() > b.nickname.toUpperCase()
+    //         ? this.order
+    //         : this.order * -1;
+    //     }
 
-        if (this.order === 1) {
-          return a[this.sortBy] - b[this.sortBy];
-        } else {
-          return b[this.sortBy] - a[this.sortBy];
-        }
-      });
-    },
+    //     if (this.order === 1) {
+    //       return a[this.sortBy] - b[this.sortBy];
+    //     } else {
+    //       return b[this.sortBy] - a[this.sortBy];
+    //     }
+    //   });
+    // },
     recentClass: function () {
       return {
         sort: true,
