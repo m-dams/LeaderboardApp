@@ -5,5 +5,8 @@ import "@fortawesome/fontawesome-free/js/all";
 import Notifications from 'notiwind'
 import './index.css'
 
-createApp(App).use(router).use(Notifications).mount("#app");
+const app = createApp(App)
+app.config.globalProperties.isLogged = false;
+
+app.use(router).use(Notifications).mount("#app");
 

@@ -171,6 +171,7 @@
 </template>
 
 <script>
+import Sidebar from "../sidebar/Sidebar.vue";
 import UserService from "@/services/UserService.js";
 import { notify } from "notiwind";
 import router from "../../router";
@@ -189,8 +190,8 @@ export default {
     sign_in: async function () {
       const email = document.getElementById("email-input").value;
       const password = document.getElementById("password-input").value;
-
-      await UserService.postLogin(email, password)
+      const url = "http://localhost:8080/auth/login";
+      await UserService.postLogin(url, email, password)
         .then((response) => {
           this.message = response.data.message;
           this.verified = response.data.verified;
@@ -198,7 +199,6 @@ export default {
           this.refreshToken = response.data.refreshToken;
           if (response.data.token) {
             localStorage.setItem("token", JSON.stringify(response.data.token));
-            console.log(localStorage.getItem("token"));
           }
           if (response.data.refreshToken) {
             localStorage.setItem(
@@ -217,6 +217,7 @@ export default {
 
       if (this.verified == true) {
         router.push("Leaderboard");
+        Sidebar.updated;
       }
     },
 
@@ -249,8 +250,9 @@ export default {
     redirect_signup: function () {
       router.push("SignUp");
     },
-    logout() {
-      localStorage.removeItem("user");
+
+    forceRerender() {
+      this.isLogged = true;
     },
   },
 };

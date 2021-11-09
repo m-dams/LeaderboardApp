@@ -7,7 +7,7 @@
     <section class="board">
       <div class="container container--narrow" v-cloak>
         <div class="loader v-cloak-visible">
-          <p>Let me load some data :)</p>
+          <p>Let me load some data</p>
         </div>
         <div class="message message--error v-cloak-hidden" v-if="error">
           Error: {{ error }}
@@ -19,6 +19,10 @@
             aria-label="Sorting options"
             aria-controls="sortable"
           >
+            <div class="table__cell table__cell--position" role="columnheader">
+              Position
+            </div>
+
             <div
               class="table__cell table__cell--user"
               role="columnheader"
@@ -31,18 +35,7 @@
                 >Nickname</SortButton
               >
             </div>
-            <div
-              class="table__cell table__cell--points table__cell--small"
-              role="columnheader"
-              :aria-sort="sortBy === 'recent' ? sortOrder : null"
-            >
-              <SortButton
-                :class-names="recentClass"
-                aria-label="Sort by past 30 days points"
-                @click="sort('recent')"
-                >Past 30 Days' Points</SortButton
-              >
-            </div>
+
             <div
               class="table__cell table__cell--points table__cell--small"
               role="columnheader"
@@ -52,7 +45,7 @@
                 :class-names="alltimeClass"
                 aria-label="Sort by alltime points"
                 @click="sort('alltime')"
-                >All-Time Points</SortButton
+                >Total score</SortButton
               >
             </div>
           </div>
@@ -66,40 +59,38 @@
             v-on:enter="enter"
           >
             <div
-              v-for="(camper, i) in sortedList"
-              :key="camper.username"
+              v-for="(userObject, i) in users"
+              :key="userObject.nickname"
               :data-index="i"
               class="table__row"
               role="row"
             >
+              <div class="table__cell table__cell--points" role="gridcell">
+                {{ i + 1 }}
+              </div>
               <div class="table__cell table__cell--user" role="gridcell">
                 <div class="user__avatar">
-                  <img :src="camper.img" alt="" />
+                  <img src="@/assets/default_profile_picture.png" alt="" />
                 </div>
                 <button
                   class="user__name user__name--no-margin"
                   type="button"
                   @click="showUserCard(i)"
                 >
-                  {{ camper.username }}
+                  {{ userObject.nickname }}
                 </button>
               </div>
-              <div
-                class="table__cell table__cell--points"
-                role="gridcell"
-              ></div>
-              <div
-                class="table__cell table__cell--points"
-                role="gridcell"
-              ></div>
+
+              <div class="table__cell table__cell--points" role="gridcell">
+                {{ userObject.besttotalScore }}
+              </div>
             </div>
           </transition-group>
         </div>
       </div>
     </section>
-    <footer class="page__footer">
-      <div class="container"></div>
-    </footer>
+
+    <!-- DETAILED VIEW -->
     <Modal v-if="showModal" aria-label="User card" @close="showModal = false">
       <div class="user">
         <div class="user__avatar user__avatar--large">
@@ -137,14 +128,140 @@
 >
 
 <script>
+import UserService from "../../services/UserService.js";
 import Modal from "./Modal";
 // import Rank from 'Rank';
 import SortButton from "./SortButton";
 import Searchbar from "../searchbar/Searchbar.vue";
 export default {
+  data() {
+    return {
+      activeCamper: null,
+      users: [],
+      error: null,
+      isFetching: true,
+      order: -1,
+      showModal: false,
+      sortBy: "alltime",
+    };
+  },
   name: "index",
   components: { Modal, SortButton, Searchbar },
-  methods: {},
+  methods: {
+    sort: function (col) {
+      if (col === this.sortBy) {
+        this.order *= -1;
+      } else {
+        this.sortBy = col;
+      }
+    },
+    showUserCard: function (i) {
+      this.showModal = true;
+      this.activeCamper = i;
+    },
+    handleKeydown: function (e) {
+      if (!this.showModal || e.key !== "Escape") {
+        return;
+      }
+      this.showModal = false;
+    },
+    beforeEnter: function (el) {
+      el.style.opacity = 0;
+      el.style.transform = "translateX(-10%)";
+    },
+    enter: function (el) {
+      const delay = el.dataset.index > 11 ? 2200 : el.dataset.index * 200;
+      setTimeout(function () {
+        el.style.opacity = 1;
+        el.style.transform = "translateX(0)";
+      }, delay);
+    },
+  },
+
+  created() {
+    UserService.getUsers()
+      .then((response) => {
+        this.users = response.data;
+      })
+      .catch((err) => {
+        this.error = err.message;
+        console.error(err.message);
+      });
+  },
+  beforeUnmount: function () {
+    document.removeEventListener("keydown", this.handleKeydown);
+  },
+
+  computed: {
+    sortedList: function () {
+      return this.campers.sort((a, b) => {
+        if (this.sortBy === "username") {
+          return a.username.toUpperCase() > b.username.toUpperCase()
+            ? this.order
+            : this.order * -1;
+        }
+
+        if (this.order === 1) {
+          return a[this.sortBy] - b[this.sortBy];
+        } else {
+          return b[this.sortBy] - a[this.sortBy];
+        }
+      });
+    },
+    recentClass: function () {
+      return {
+        sort: true,
+        "sort--desc": this.order === -1,
+        "sort--asc": this.order === 1,
+        "sort--active": this.sortBy === "recent",
+      };
+    },
+    alltimeClass: function () {
+      return {
+        sort: true,
+        "sort--desc": this.order === -1,
+        "sort--asc": this.order === 1,
+        "sort--active": this.sortBy === "alltime",
+      };
+    },
+    camperClass: function () {
+      return {
+        sort: true,
+        "sort--desc": this.order === -1,
+        "sort--asc": this.order === 1,
+        "sort--active": this.sortBy === "username",
+      };
+    },
+    fccLink: function () {
+      if (this.activeCamper === null) {
+        return null;
+      }
+      return `https://www.freecodecamp.com/${
+        this.campers[this.activeCamper].username
+      }`;
+    },
+    fccLinkTitle: function () {
+      if (this.activeCamper === null) {
+        return null;
+      }
+      return `Visit ${
+        this.campers[this.activeCamper].username
+      } on Free Code Camp`;
+    },
+    sortOrder: function () {
+      return this.order === 1 ? "ascending" : "descending";
+    },
+  },
+  filters: {
+    number: function (num) {
+      return new Intl.NumberFormat().format(num);
+    },
+    ordinal: function (num) {
+      const suffixes = ["th", "st", "nd", "rd"];
+      const v = num % 100;
+      return num + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
+    },
+  },
 };
 </script>
 

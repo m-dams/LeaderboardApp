@@ -1,22 +1,17 @@
 <template>
-  <div class="home">
-    <!-- <ListPlayers msg="Welcome to Your Vue.js App" /> -->
-  </div>
+  <div class="home"></div>
 </template>
 
 <script>
-// import UserService from "@/services/UserService.js";
-// import ListPlayers from "@/components/ListPlayers.vue";
+import UserService from "@/services/UserService.js";
 
 export default {
   name: "Home",
-  components: {
-    // ListPlayers,
-  },
+  components: {},
   async created() {
-    // await UserService.getToken().then((response) => {
-    //   console.log(response.data);
-    // });
+    await UserService.getToken().then((response) => {
+      console.log(response.data);
+    });
   },
 };
 </script>

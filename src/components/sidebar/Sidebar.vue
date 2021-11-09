@@ -1,5 +1,6 @@
 <script>
 import SidebarLink from "./SidebarLink";
+import { notify } from "notiwind";
 import { collapsed, toggleSidebar, sidebarWidth } from "./state";
 
 export default {
@@ -8,11 +9,47 @@ export default {
   setup() {
     return { collapsed, toggleSidebar, sidebarWidth };
   },
+  data() {
+    return {
+      componentKey: false,
+    };
+  },
+  mounted() {
+    if (localStorage.getItem("token")) {
+      this.componentKey = true;
+    }
+  },
+  updated() {
+    if (localStorage.getItem("token")) {
+      this.componentKey = true;
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem("token");
+      this.forceRerenderFalse();
+      this.notify_generic("You have successfully logged out");
+    },
+    notify_generic: function (message) {
+      notify(
+        {
+          group: "Success",
+          title: "Success",
+          text: message,
+        },
+        3000
+      );
+    },
+    forceRerenderFalse() {
+      this.componentKey = false;
+      this.$forceUpdate();
+    },
+  }
 };
 </script>
 
 <template>
-  <div class="sidebar" :style="{ width: sidebarWidth }">
+  <div class="sidebar" :style="{ width: sidebarWidth }" :key="componentKey">
     <h1>
       <span v-if="collapsed">
         <div>Z</div>
@@ -23,14 +60,31 @@ export default {
     </h1>
 
     <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
-    <SidebarLink to="/login" icon="fas fa-sign-in-alt">Login</SidebarLink>
-    <SidebarLink to="/signup" icon="fas fa-user-plus">Register</SidebarLink>
+    <SidebarLink
+      v-if="componentKey == false"
+      to="/login"
+      icon="fas fa-sign-in-alt"
+      >Login</SidebarLink
+    >
+    <SidebarLink
+      v-if="componentKey == false"
+      to="/signup"
+      icon="fas fa-user-plus"
+      >Register</SidebarLink
+    >
     <SidebarLink to="/leaderboard" icon="fas fa-crown">Leaderboard</SidebarLink>
-    <SidebarLink to="/myprogress" icon="fas fa-chart-line"
+    <SidebarLink v-if="componentKey" to="/myprogress" icon="fas fa-chart-line"
       >My progress</SidebarLink
     >
-    <SidebarLink to="/myprofile" icon="fas fa-address-card"
+    <SidebarLink v-if="componentKey" to="/myprofile" icon="fas fa-address-card"
       >My Profile</SidebarLink
+    >
+    <SidebarLink
+      v-if="componentKey"
+      @click.prevent="logout()"
+      to="/login"
+      icon="fas fa-sign-out-alt"
+      >Sign out</SidebarLink
     >
 
     <span

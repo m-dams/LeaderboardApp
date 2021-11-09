@@ -1,15 +1,10 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:8000',
-    // withCredentials: false,
-    // headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json'
-    // }
+    baseURL: 'http://localhost:8080',
 })
 
-// axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token') ;
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token') ;
 
 export default {
     getUsers() {
@@ -21,8 +16,8 @@ export default {
     getUserNickname(nickname){
         return apiClient.get('/data/player/'+ nickname)
     },
-    postLogin(email, password) {
-        return apiClient.post('/auth/login', {
+    postLogin(url, email, password) {
+        return apiClient.post(url, {
             email,
             password,
           })
@@ -34,11 +29,16 @@ export default {
             password
         }) 
     },
-    getToken() {
-        return apiClient.get('token');
+    getUser() {
+        return apiClient.get('user');
     },
-    getRefreshToken() {
-        return apiClient.get('refreshToken')
-    }
+    // getRefreshToken() {
+    //     return apiClient.get('refreshToken');
+    // },
+    logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+    },
+
 
 }
