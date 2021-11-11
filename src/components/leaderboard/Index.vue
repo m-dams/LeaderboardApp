@@ -1,3 +1,154 @@
+<script>
+import UserService from "../../services/UserService.js";
+import Modal from "./Modal";
+// import Rank from 'Rank';
+import SortButton from "./SortButton";
+import Searchbar from "../searchbar/Searchbar.vue";
+export default {
+  data() {
+    return {
+      activeCamper: null,
+      users: [],
+      error: null,
+      isFetching: true,
+      order: -1,
+      showModal: false,
+      sortBy: "besttotalScore",
+    };
+  },
+  name: "index",
+  components: { Modal, SortButton, Searchbar },
+  methods: {
+    sort: function (col) {
+      console.log(col);
+      if (col == this.sortBy) {
+        this.order *= -1;
+      } else {
+        this.sortBy = col;
+      }
+    },
+    showUserCard: function (i) {
+      this.showModal = true;
+      this.activeCamper = i;
+    },
+    // updateRanks: function (campers) {
+    //   const sortedByAlltime = campers
+    //     .slice()
+    //     .sort((a, b) => b.alltime - a.alltime);
+    //   const ranks = campers
+    //     .slice()
+    //     .map(
+    //       (camper) =>
+    //         sortedByAlltime.findIndex((x) => x.alltime === camper.alltime) + 1
+    //     );
+
+    //   return campers.map((camper, index) =>
+    //     Object.assign({}, camper, {
+    //       rank: {
+    //         alltime: ranks[index],
+    //         recent: index + 1,
+    //       },
+    //     })
+    //   );
+    // },
+    // handleKeydown: function (e) {
+    //   if (!this.showModal || e.key !== "Escape") {
+    //     return;
+    //   }
+    //   this.showModal = false;
+    // },
+    beforeEnter: function (el) {
+      el.style.opacity = 0;
+      el.style.transform = "translateX(-10%)";
+    },
+    /* eslint-disable */
+    enter: function (el, done) {
+      const delay = el.dataset.index > 10 ? 2200 : el.dataset.index * 200;
+      setTimeout(function () {
+        el.style.opacity = 1;
+        el.style.transform = "translateX(0)";
+      }, delay);
+    },
+  },
+
+  created() {
+    UserService.getUsers()
+      .then((response) => {
+        this.users = response.data;
+      })
+      .catch((err) => {
+        this.error = err.message;
+        console.error(err.message);
+      });
+  },
+  // beforeUnmount: function () {
+  //   document.removeEventListener("keydown", this.handleKeydown);
+  // },
+
+  computed: {
+    sortedList: function () {
+      return this.users.sort((a, b) => {
+        if (this.sortBy == "nickname") {
+          return a.nickname.toUpperCase() > b.nickname.toUpperCase()
+            ? this.order
+            : this.order * -1;
+        }
+        if (this.order === 1) {
+          return a[this.sortBy] - b[this.sortBy];
+        } else {
+          return b[this.sortBy] - a[this.sortBy];
+        }
+      });
+    },
+    alltimeClass: function () {
+      return {
+        sort: true,
+        "sort--desc": this.order === -1,
+        "sort--asc": this.order === 1,
+        "sort--active": this.sortBy === "besttotalScore",
+      };
+    },
+    nicknameClass: function () {
+      return {
+        sort: true,
+        "sort--desc": this.order === -1,
+        "sort--asc": this.order === 1,
+        "sort--active": this.sortBy === "nickname",
+      };
+    },
+    // fccLink: function () {
+    //   if (this.activeCamper === null) {
+    //     return null;
+    //   }
+    //   return `https://www.freecodecamp.com/${
+    //     this.campers[this.activeCamper].username
+    //   }`;
+    // },
+    // fccLinkTitle: function () {
+    //   if (this.activeCamper === null) {
+    //     return null;
+    //   }
+    //   return `Visit ${
+    //     this.campers[this.activeCamper].username
+    //   } on Free Code Camp`;
+    // },
+    sortOrder: function () {
+      return this.order === 1 ? "ascending" : "descending";
+    },
+  },
+  filters: {
+    number: function (num) {
+      return new Intl.NumberFormat().format(num);
+    },
+    ordinal: function (num) {
+      const suffixes = ["th", "st", "nd", "rd"];
+      const v = num % 100;
+      return num + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
+    },
+  },
+};
+</script>
+
 <template>
   <div class="page" id="app">
     <header class="page__header">
@@ -26,12 +177,12 @@
             <div
               class="table__cell table__cell--user"
               role="columnheader"
-              :aria-sort="sortBy === 'username' ? sortOrder : null"
+              :aria-sort="sortBy === 'nickname' ? sortOrder : null"
             >
               <SortButton
-                :class-names="camperClass"
-                aria-label="Sort by username"
-                @click="sort('nickname')"
+                :class-names="nicknameClass"
+                aria-label="Sort by nickname"
+                @clicked="sort('nickname')"
                 >Nickname</SortButton
               >
             </div>
@@ -39,12 +190,12 @@
             <div
               class="table__cell table__cell--points table__cell--small"
               role="columnheader"
-              :aria-sort="sortBy === 'alltime' ? sortOrder : null"
+              :aria-sort="sortBy === 'besttotalScore' ? sortOrder : null"
             >
               <SortButton
                 :class-names="alltimeClass"
                 aria-label="Sort by alltime points"
-                @click="sort('alltime')"
+                @clicked="sort('besttotalScore')"
                 >Total score</SortButton
               >
             </div>
@@ -59,7 +210,7 @@
             v-on:enter="enter"
           >
             <div
-              v-for="(userObject, i) in users"
+              v-for="(userObject, i) in sortedList"
               :key="userObject.nickname"
               :data-index="i"
               class="table__row"
@@ -91,13 +242,17 @@
     </section>
 
     <!-- DETAILED VIEW -->
-    <Modal v-if="showModal" aria-label="User card" @close="showModal = false">
+    <Modal
+      :showModal="showModal"
+      :userData="users[activeCamper]"
+      aria-label="User card"
+      @close="showModal = false"
+    >
       <div class="user">
         <div class="user__avatar user__avatar--large">
           <img src="@/assets/default_profile_picture.png" />
         </div>
         <h3 class="user__name user__name--large">
-          <a>{{ users.nickname }}</a>
         </h3>
         <div class="user__ranks">
           <div class="rank">
@@ -118,168 +273,6 @@
   </div>
 </template>
 >
-
-<script>
-import UserService from "../../services/UserService.js";
-import Modal from "./Modal";
-// import Rank from 'Rank';
-import SortButton from "./SortButton";
-import Searchbar from "../searchbar/Searchbar.vue";
-export default {
-  data() {
-    return {
-      activeCamper: null,
-      users: [],
-      error: null,
-      isFetching: true,
-      order: -1,
-      showModal: false,
-      sortBy: "alltime",
-    };
-  },
-  name: "index",
-  components: { Modal, SortButton, Searchbar },
-  methods: {
-    sort: function (col) {
-      if (col === this.sortBy) {
-        this.order *= -1;
-      } else {
-        this.sortBy = col;
-      }
-    },
-    showUserCard: function (i) {
-      this.showModal = true;
-      this.activeCamper = i;
-    },
-    updateRanks: function (campers) {
-      const sortedByAlltime = campers
-        .slice()
-        .sort((a, b) => b.alltime - a.alltime);
-      const ranks = campers
-        .slice()
-        .map(
-          (camper) =>
-            sortedByAlltime.findIndex((x) => x.alltime === camper.alltime) + 1
-        );
-
-      return campers.map((camper, index) =>
-        Object.assign({}, camper, {
-          rank: {
-            alltime: ranks[index],
-            recent: index + 1,
-          },
-        })
-      );
-    },
-    toggleModal: function () {
-      this.showModal = !this.showModal;
-    },
-    handleKeydown: function (e) {
-      if (!this.showModal || e.key !== "Escape") {
-        return;
-      }
-      this.showModal = false;
-    },
-    beforeEnter: function (el) {
-      el.style.opacity = 0;
-      el.style.transform = "translateX(-10%)";
-    },
-    /* eslint-disable */
-    enter: function (el, done) {
-      const delay = el.dataset.index > 10 ? 2200 : el.dataset.index * 200;
-      setTimeout(function () {
-        el.style.opacity = 1;
-        el.style.transform = "translateX(0)";
-      }, delay);
-    },
-  },
-
-  created() {
-    UserService.getUsers()
-      .then((response) => {
-        this.users = response.data;
-      })
-      .catch((err) => {
-        this.error = err.message;
-        console.error(err.message);
-      });
-  },
-  beforeUnmount: function () {
-    document.removeEventListener("keydown", this.handleKeydown);
-  },
-
-  computed: {
-    // sortedList: function () {
-    //   return this.campers.sort((a, b) => {
-    //     if (this.sortBy === "nickname") {
-    //       return a.nickname.toUpperCase() > b.nickname.toUpperCase()
-    //         ? this.order
-    //         : this.order * -1;
-    //     }
-
-    //     if (this.order === 1) {
-    //       return a[this.sortBy] - b[this.sortBy];
-    //     } else {
-    //       return b[this.sortBy] - a[this.sortBy];
-    //     }
-    //   });
-    // },
-    recentClass: function () {
-      return {
-        sort: true,
-        "sort--desc": this.order === -1,
-        "sort--asc": this.order === 1,
-        "sort--active": this.sortBy === "recent",
-      };
-    },
-    alltimeClass: function () {
-      return {
-        sort: true,
-        "sort--desc": this.order === -1,
-        "sort--asc": this.order === 1,
-        "sort--active": this.sortBy === "alltime",
-      };
-    },
-    camperClass: function () {
-      return {
-        sort: true,
-        "sort--desc": this.order === -1,
-        "sort--asc": this.order === 1,
-        "sort--active": this.sortBy === "username",
-      };
-    },
-    fccLink: function () {
-      if (this.activeCamper === null) {
-        return null;
-      }
-      return `https://www.freecodecamp.com/${
-        this.campers[this.activeCamper].username
-      }`;
-    },
-    fccLinkTitle: function () {
-      if (this.activeCamper === null) {
-        return null;
-      }
-      return `Visit ${
-        this.campers[this.activeCamper].username
-      } on Free Code Camp`;
-    },
-    sortOrder: function () {
-      return this.order === 1 ? "ascending" : "descending";
-    },
-  },
-  filters: {
-    number: function (num) {
-      return new Intl.NumberFormat().format(num);
-    },
-    ordinal: function (num) {
-      const suffixes = ["th", "st", "nd", "rd"];
-      const v = num % 100;
-      return num + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
-    },
-  },
-};
-</script>
 
 <style scoped>
 * {
@@ -351,8 +344,9 @@ button:focus {
 }
 
 .page__title {
-  font-size: 2rem;
-  font-weight: 300;
+  font-size: 2.5rem;
+  color: white;
+  font-weight: 600;
   margin: 0;
 }
 

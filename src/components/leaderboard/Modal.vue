@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" mode="in-out">
+  <transition name="modal" mode="in-out" v-if="showModal">
     <div>
       <button
         class="
@@ -23,7 +23,6 @@
           duration-150
         "
         type="button"
-        v-on:click="toggleModal()"
       >
         Open regular modal
       </button>
@@ -67,7 +66,7 @@
                 rounded-t
               "
             >
-              <h3 class="text-3xl font-semibold">Modal Title</h3>
+              <h3 class="text-3xl font-semibold">{{ userData.nickname }}</h3>
               <button
                 class="
                   p-1
@@ -83,7 +82,6 @@
                   outline-none
                   focus:outline-none
                 "
-                v-on:click="toggleModal()"
               >
                 <span
                   class="
@@ -105,11 +103,18 @@
             <!--body-->
             <div class="relative p-6 flex-auto">
               <p class="my-4 text-blueGray-500 text-lg leading-relaxed">
-                I always felt like I could do anything. That’s the main thing
-                people are controlled by! Thoughts- their perception of
-                themselves! They're slowed down by their perception of
-                themselves. If you're taught you can’t do anything, you won’t do
-                anything. I was taught I could do everything.
+                Best gathered stars: {{ userData.bestGatheredStars }}
+              </p>
+              <p class="my-5 text-blueGray-500 text-lg leading-relaxed">
+                best Enemies Killed By Melee:
+                {{ userData.bestEnemiesKilledByMelee }}
+              </p>
+              <p class="my-6 text-blueGray-500 text-lg leading-relaxed">
+                Best Enemies Killed from distance:
+                {{ userData.bestEnemiesKilledFromDistance }}
+              </p>
+              <p class="my-7 text-blueGray-500 text-lg leading-relaxed">
+                Best duration time: {{ userData.bestDurationTime }}
               </p>
             </div>
             <!--footer-->
@@ -125,11 +130,11 @@
             >
               <button
                 class="
-                  text-red-500
+                  text-green-500
                   bg-transparent
-                  border border-solid border-red-500
-                  hover:bg-red-500 hover:text-white
-                  active:bg-red-600
+                  border border-solid border-green-500
+                  hover:bg-green-500 hover:text-white
+                  active:bg-green-600
                   font-bold
                   uppercase
                   text-sm
@@ -145,40 +150,16 @@
                   duration-150
                 "
                 type="button"
-                v-on:click="toggleModal()"
+                ref="closeButton"
+                @click="$emit('close')"
               >
                 Close
-              </button>
-              <button
-                class="
-                  text-red-500
-                  background-transparent
-                  font-bold
-                  uppercase
-                  px-6
-                  py-2
-                  text-sm
-                  outline-none
-                  focus:outline-none
-                  mr-1
-                  mb-1
-                  ease-linear
-                  transition-all
-                  duration-150
-                "
-                type="button"
-                v-on:click="toggleModal()"
-              >
-                Save Changes
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div
-        v-if="showModal"
-        class="opacity-25 fixed inset-0 z-40 bg-black"
-      ></div>
+      <div class="opacity-25 fixed inset-0 z-40 bg-black"></div>
     </div>
   </transition>
 </template>
@@ -186,6 +167,8 @@
 <script>
 export default {
   props: {
+    showModal: Boolean,
+    userData: JSON,
     ariaLabel: {
       type: String,
       required: true,
