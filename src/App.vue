@@ -215,9 +215,7 @@ export default {
     <router-view />
   </div>
 </template>
-
 <style>
-
 :root {
   --sidebar-bg-color: #2f855a;
   --sidebar-item-hover: #38a169;

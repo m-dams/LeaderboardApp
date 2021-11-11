@@ -154,7 +154,7 @@ export default {
     <header class="page__header">
       <h1 class="page__title">Leaderboard</h1>
     </header>
-    <Searchbar />
+    <Searchbar v-on:search="(id) => this.showUserCard(id)" />
     <section class="board">
       <div class="container container--narrow" v-cloak>
         <div class="loader v-cloak-visible">
@@ -252,8 +252,7 @@ export default {
         <div class="user__avatar user__avatar--large">
           <img src="@/assets/default_profile_picture.png" />
         </div>
-        <h3 class="user__name user__name--large">
-        </h3>
+        <h3 class="user__name user__name--large"></h3>
         <div class="user__ranks">
           <div class="rank">
             <h4 class="rank__title">Alltime</h4>
