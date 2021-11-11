@@ -1,7 +1,6 @@
 <script>
 import UserService from "../../services/UserService.js";
 import Modal from "./Modal";
-// import Rank from 'Rank';
 import SortButton from "./SortButton";
 import Searchbar from "../searchbar/Searchbar.vue";
 export default {
@@ -31,32 +30,6 @@ export default {
       this.showModal = true;
       this.activeCamper = i;
     },
-    // updateRanks: function (campers) {
-    //   const sortedByAlltime = campers
-    //     .slice()
-    //     .sort((a, b) => b.alltime - a.alltime);
-    //   const ranks = campers
-    //     .slice()
-    //     .map(
-    //       (camper) =>
-    //         sortedByAlltime.findIndex((x) => x.alltime === camper.alltime) + 1
-    //     );
-
-    //   return campers.map((camper, index) =>
-    //     Object.assign({}, camper, {
-    //       rank: {
-    //         alltime: ranks[index],
-    //         recent: index + 1,
-    //       },
-    //     })
-    //   );
-    // },
-    // handleKeydown: function (e) {
-    //   if (!this.showModal || e.key !== "Escape") {
-    //     return;
-    //   }
-    //   this.showModal = false;
-    // },
     beforeEnter: function (el) {
       el.style.opacity = 0;
       el.style.transform = "translateX(-10%)";
@@ -81,9 +54,6 @@ export default {
         console.error(err.message);
       });
   },
-  // beforeUnmount: function () {
-  //   document.removeEventListener("keydown", this.handleKeydown);
-  // },
 
   computed: {
     sortedList: function () {
@@ -116,22 +86,7 @@ export default {
         "sort--active": this.sortBy === "nickname",
       };
     },
-    // fccLink: function () {
-    //   if (this.activeCamper === null) {
-    //     return null;
-    //   }
-    //   return `https://www.freecodecamp.com/${
-    //     this.campers[this.activeCamper].username
-    //   }`;
-    // },
-    // fccLinkTitle: function () {
-    //   if (this.activeCamper === null) {
-    //     return null;
-    //   }
-    //   return `Visit ${
-    //     this.campers[this.activeCamper].username
-    //   } on Free Code Camp`;
-    // },
+
     sortOrder: function () {
       return this.order === 1 ? "ascending" : "descending";
     },
@@ -248,26 +203,6 @@ export default {
       aria-label="User card"
       @close="showModal = false"
     >
-      <div class="user">
-        <div class="user__avatar user__avatar--large">
-          <img src="@/assets/default_profile_picture.png" />
-        </div>
-        <h3 class="user__name user__name--large"></h3>
-        <div class="user__ranks">
-          <div class="rank">
-            <h4 class="rank__title">Alltime</h4>
-            <div class="rank__points">
-              <span class="rank__label">points</span>
-            </div>
-          </div>
-          <div class="rank">
-            <h4 class="rank__title">Recent</h4>
-            <div class="rank__points">
-              <span class="rank__label">points</span>
-            </div>
-          </div>
-        </div>
-      </div>
     </Modal>
   </div>
 </template>
@@ -276,42 +211,6 @@ export default {
 <style scoped>
 * {
   box-sizing: inherit;
-}
-
-html,
-body {
-  height: 100%;
-}
-
-body {
-  background-color: #eeeff0;
-  box-sizing: border-box;
-  color: rgba(0, 0, 0, 0.6);
-  font-family: "Open Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  font-weight: 400;
-  line-height: 1.5;
-  margin: 0;
-  overflow-x: hidden;
-  position: relative;
-}
-
-a {
-  border-bottom: 1px solid transparent;
-  color: rgba(0, 0, 0, 0.6);
-  text-decoration: none;
-  transition: color 0.3s ease-in-out, border 0.3s ease-in-out;
-}
-
-a:hover {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  color: rgba(0, 0, 0, 0.75);
-}
-
-a[target="_blank"]::after {
-  bottom: -1px;
-  /* content: url(link.svg); */
-  margin-left: 0.25rem;
-  position: relative;
 }
 
 button {
@@ -488,46 +387,6 @@ button:focus {
   flex-direction: column;
   justify-content: center;
   width: 100%;
-}
-
-.user__ranks {
-  align-items: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.2);
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.rank {
-  flex-basis: 50%;
-  text-align: center;
-}
-
-.rank__title {
-  font-size: 1.25rem;
-  font-weight: 400;
-  margin: 1rem auto;
-}
-
-.rank__points {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  font-size: 1.375rem;
-}
-
-.rank__label {
-  color: rgba(0, 0, 0, 0.3);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-}
-
-.copyright {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.75rem;
-  font-weight: 300;
-  line-height: 1rem;
-  margin: 0;
 }
 
 .message {

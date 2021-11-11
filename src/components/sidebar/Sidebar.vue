@@ -59,7 +59,6 @@ export default {
       <span v-else>ZPI</span>
     </h1>
 
-    <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
     <SidebarLink
       :v-if="componentKey == false"
       to="/login"

@@ -4,9 +4,7 @@ module.exports = {
     node: true,
   },
   extends: ["plugin:vue/vue3-essential", "eslint:recommended", "prettier"],
-  "plugins": [
-    "prettier"
-  ],
+  plugins: ["prettier"],
   parserOptions: {
     parser: "babel-eslint",
   },
@@ -16,7 +14,7 @@ module.exports = {
     "prettier/prettier": [
       "error",
       {
-        "endOfLine": "auto"
+        endOfLine: "auto",
       },
     ],
   },

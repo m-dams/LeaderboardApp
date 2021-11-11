@@ -1,15 +1,14 @@
 <script>
 import { collapsed, toggleSidebar } from "@/components/sidebar/state";
-import Index from "../components/leaderboard/Index";
+import Leaderboard from "../components/leaderboard/Leaderboard";
 export default {
-  components: { Index },
+  components: { Leaderboard },
   setup() {
     return { collapsed, toggleSidebar };
   },
-  
 };
 </script>
 
 <template>
-  <Index />
+  <Leaderboard />
 </template>

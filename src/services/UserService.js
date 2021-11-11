@@ -1,44 +1,43 @@
-import axios from 'axios'
+import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:8080',
-})
+  baseURL: "http://localhost:8080",
+});
 
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token') ;
+axios.defaults.headers.common["Authorization"] =
+  "Bearer " + localStorage.getItem("token");
 
 export default {
-    getUsers() {
-        return apiClient.get('/data/player')
-    },
-    getUserId(id) {
-        return apiClient.get('/data/player/' +id)
-    },
-    getUserNickname(nickname){
-        return apiClient.get('/data/player/'+ nickname)
-    },
-    postLogin(url, email, password) {
-        return apiClient.post(url, {
-            email,
-            password,
-          })
-    },
-    postRegister( nickname, email, password){
-        return apiClient.post('/auth/register', {
-            nickname, 
-            email, 
-            password
-        }) 
-    },
-    getUser() {
-        return apiClient.get('user');
-    },
-    // getRefreshToken() {
-    //     return apiClient.get('refreshToken');
-    // },
-    logout() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-    },
-
-
-}
+  getUsers() {
+    return apiClient.get("/data/player");
+  },
+  getUserId(id) {
+    return apiClient.get("/data/player/" + id);
+  },
+  getUserNickname(nickname) {
+    return apiClient.get("/data/player/" + nickname);
+  },
+  postLogin(url, email, password) {
+    return apiClient.post(url, {
+      email,
+      password,
+    });
+  },
+  postRegister(nickname, email, password) {
+    return apiClient.post("/auth/register", {
+      nickname,
+      email,
+      password,
+    });
+  },
+  getUser() {
+    return apiClient.get("user");
+  },
+  // getRefreshToken() {
+  //     return apiClient.get('refreshToken');
+  // },
+  logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+  },
+};
