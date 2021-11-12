@@ -313,32 +313,6 @@ button:focus {
   font-size: 0.825rem;
 }
 
-.sort {
-  align-items: center;
-  background-color: transparent;
-  border: 0;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.sort--active {
-  color: rgba(0, 0, 0, 0.8);
-}
-
-.sort path {
-  fill: #ccc;
-  transform-origin: center;
-  transition: fill 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-
-.sort--desc.sort--active path:last-child,
-.sort--asc.sort--active path:first-child {
-  fill: #555;
-  transform: scale(1.25);
-}
-
 .user__avatar {
   border-radius: 50%;
   height: 64px;

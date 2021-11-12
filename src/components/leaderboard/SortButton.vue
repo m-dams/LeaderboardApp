@@ -49,3 +49,31 @@ export default {
     </svg>
   </button>
 </template>
+
+<style scoped>
+.sort {
+  align-items: center;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.sort--active {
+  color: rgba(60, 179, 113, 0.8);
+}
+
+.sort path {
+  fill: #ccc;
+  transform-origin: center;
+  transition: fill 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.sort--desc.sort--active path:last-child,
+.sort--asc.sort--active path:first-child {
+  fill: #008000;
+  transform: scale(1.25);
+}
+</style>

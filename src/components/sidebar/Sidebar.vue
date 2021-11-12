@@ -60,26 +60,26 @@ export default {
     </h1>
 
     <SidebarLink
-      :v-if="componentKey == false"
+      v-if="componentKey == false"
       to="/login"
       icon="fas fa-sign-in-alt"
       >Login</SidebarLink
     >
     <SidebarLink
-      :v-if="componentKey == false"
+      v-if="componentKey == false"
       to="/signup"
       icon="fas fa-user-plus"
       >Register</SidebarLink
     >
     <SidebarLink to="/leaderboard" icon="fas fa-crown">Leaderboard</SidebarLink>
-    <SidebarLink :v-if="componentKey" to="/myprogress" icon="fas fa-chart-line"
+    <SidebarLink v-if="componentKey" to="/myprogress" icon="fas fa-chart-line"
       >My progress</SidebarLink
     >
-    <SidebarLink :v-if="componentKey" to="/myprofile" icon="fas fa-address-card"
+    <SidebarLink v-if="componentKey" to="/myprofile" icon="fas fa-address-card"
       >My Profile</SidebarLink
     >
     <SidebarLink
-      :v-if="componentKey"
+      v-if="componentKey"
       @click.prevent="logout()"
       to="/login"
       icon="fas fa-sign-out-alt"
