@@ -168,6 +168,7 @@
 export default {
   props: {
     showModal: Boolean,
+    gameDetail: JSON,
     userData: JSON,
     ariaLabel: {
       type: String,

@@ -33,9 +33,18 @@ export default {
   getUser() {
     return apiClient.get("user");
   },
-  // getRefreshToken() {
-  //     return apiClient.get('refreshToken');
-  // },
+  getUserDetails() {
+    return apiClient.get("/user-details/");
+  },
+  getGameDetail() {
+    return apiClient.get("/game-detail/");
+  },
+  postAddToFavourite(nickname) {
+    return apiClient.post("add-to-favourites/", { nickname });
+  },
+  getRefreshToken() {
+    return apiClient.get("refreshToken");
+  },
   logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");

@@ -1,5 +1,6 @@
 <script>
 import UserService from "../../services/UserService.js";
+import Dropdown from "./Dropdown";
 import Modal from "./Modal";
 import SortButton from "./SortButton";
 import Searchbar from "../searchbar/Searchbar.vue";
@@ -12,11 +13,13 @@ export default {
       isFetching: true,
       order: -1,
       showModal: false,
+      gameDetail: null,
       sortBy: "besttotalScore",
+      favourites: ["michu"],
     };
   },
   name: "index",
-  components: { Modal, SortButton, Searchbar },
+  components: { Modal, SortButton, Searchbar, Dropdown },
   methods: {
     sort: function (col) {
       console.log(col);
@@ -26,9 +29,19 @@ export default {
         this.sortBy = col;
       }
     },
-    showUserCard: function (i) {
+    showUserCard: async function (i, gameId) {
       this.showModal = true;
       this.activeCamper = i;
+      await UserService.getGameDetail(gameId)
+        .then((response) => {
+          this.gameDetail = response.data;
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.log(error.response.data.error);
+            this.notify_error(error.response.data.error);
+          }
+        });
     },
     beforeEnter: function (el) {
       el.style.opacity = 0;
@@ -41,6 +54,26 @@ export default {
         el.style.opacity = 1;
         el.style.transform = "translateX(0)";
       }, delay);
+    },
+    isFavourite: function (favourite) {
+      for (var i = 0; i < this.favourites.length; i++) {
+        if (this.favourites[i] == favourite) {
+          return true;
+        }
+      }
+      return false;
+    },
+    addToFavourite: async function (nickname) {
+      await UserService.postAddToFavourite(nickname)
+        .then((response) => {
+          this.favourites = response.data.favourites;
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.log(error.response.data.error);
+            this.notify_error(error.response.data.error);
+          }
+        });
     },
   },
 
@@ -115,6 +148,7 @@ export default {
         <div class="loader v-cloak-visible">
           <p>Let me load some data</p>
         </div>
+        <Dropdown />
         <div class="message message--error v-cloak-hidden" v-if="error">
           Error: {{ error }}
         </div>
@@ -171,7 +205,23 @@ export default {
               class="table__row"
               role="row"
             >
-              <div class="table__cell table__cell--points" role="gridcell">
+              <div class="table__cell table__cell--favourite" role="gridcell">
+                <button
+                  class="favourite_button"
+                  :key="favourites"
+                  v-if="isFavourite(userObject.nickname)"
+                  @click.prevent="addToFavourite(userObject.nickname)"
+                >
+                  <i id="icon" class="fas fa-star text-yellow-300 fa-2x"></i>
+                </button>
+                <button
+                  class="favourite_button"
+                  :key="favourites"
+                  v-else
+                  @click.prevent="addToFavourite(userObject.nickname)"
+                >
+                  <i id="icon" class="far fa-star text-yellow-300 fa-2x"></i>
+                </button>
                 {{ i + 1 }}
               </div>
               <div class="table__cell table__cell--user" role="gridcell">
@@ -181,7 +231,7 @@ export default {
                 <button
                   class="user__name user__name--no-margin"
                   type="button"
-                  @click="showUserCard(i)"
+                  @click="showUserCard(i, userObject.gameId)"
                 >
                   {{ userObject.nickname }}
                 </button>
@@ -199,6 +249,7 @@ export default {
     <!-- DETAILED VIEW -->
     <Modal
       :showModal="showModal"
+      :gameDetail="gameDetail"
       :userData="users[activeCamper]"
       aria-label="User card"
       @close="showModal = false"
@@ -224,6 +275,11 @@ button {
 
 button:focus {
   outline: thin dotted;
+}
+
+.favourite_button {
+  size: 200%;
+  padding-right: 30%;
 }
 
 .page__header,
@@ -289,6 +345,10 @@ button:focus {
 
 .table__row:nth-child(even) {
   background-color: rgba(0, 0, 0, 0.01);
+}
+
+.table__cell--favourite {
+  padding-right: 9.5%;
 }
 
 .table__cell {
