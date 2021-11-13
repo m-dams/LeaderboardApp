@@ -14,6 +14,124 @@
     class="statisticOptions"
     @gatheredStars="statistic = 'Gathered Stars'"
   ></options>
+  <div class="averageStatistics">
+    <div class="box-1 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
+      <div class="flex justify-center md:justify-end -mt-16">
+        <img
+          class="w-20 h-20 object-cover rounded-full border-2 border-indigo-500"
+          src="@/assets/killed.png"
+        />
+      </div>
+      <div>
+        <h2 class="text-gray-800 text-3xl font-semibold">Killed Enemies</h2>
+        <p class="mt-2 text-gray-600">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae dolores
+          deserunt ea doloremque natus error, rerum quas odio quaerat nam ex
+          commodi hic, suscipit in a veritatis pariatur minus consequuntur!
+        </p>
+      </div>
+    </div>
+    <div class="box-2 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
+      <div class="flex justify-center md:justify-end -mt-16">
+        <img
+          class="w-20 h-20 object-cover rounded-full border-2 border-indigo-500"
+          src="@/assets/star.png"
+        />
+      </div>
+      <div>
+        <h2 class="text-gray-800 text-3xl font-semibold">Gathered Stars</h2>
+        <p class="mt-2 text-gray-600">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae dolores
+          deserunt ea doloremque natus error, rerum quas odio quaerat nam ex
+          commodi hic, suscipit in a veritatis pariatur minus consequuntur!
+        </p>
+      </div>
+    </div>
+    <div class="box-3 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
+      <div class="flex justify-center md:justify-end -mt-16">
+        <img
+          class="w-20 h-20 object-cover rounded-full border-2 border-indigo-500"
+          src="@/assets/points.png"
+        />
+      </div>
+      <div>
+        <h2 class="text-gray-800 text-3xl font-semibold">Total Points</h2>
+        <p class="mt-2 text-gray-600">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae dolores
+          deserunt ea doloremque natus error, rerum quas odio quaerat nam ex
+          commodi hic, suscipit in a veritatis pariatur minus consequuntur!
+        </p>
+      </div>
+    </div>
+    <div class="box-4 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
+      <div class="flex justify-center md:justify-end -mt-16">
+        <img
+          class="w-20 h-20 object-cover rounded-full border-2 border-indigo-500"
+          src="@/assets/heart.png"
+        />
+      </div>
+      <div>
+        <h2 class="text-gray-800 text-3xl font-semibold">
+          Gathered Life Points
+        </h2>
+        <p class="mt-2 text-gray-600">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae dolores
+          deserunt ea doloremque natus error, rerum quas odio quaerat nam ex
+          commodi hic, suscipit in a veritatis pariatur minus consequuntur!
+        </p>
+      </div>
+    </div>
+    <div class="box-5 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
+      <div class="flex justify-center md:justify-end -mt-16">
+        <img
+          class="w-20 h-20 object-cover rounded-full border-2 border-indigo-500"
+          src="@/assets/distance.png"
+        />
+      </div>
+      <div>
+        <h2 class="text-gray-800 text-3xl font-semibold">
+          Killed from Distance
+        </h2>
+        <p class="mt-2 text-gray-600">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae dolores
+          deserunt ea doloremque natus error, rerum quas odio quaerat nam ex
+          commodi hic, suscipit in a veritatis pariatur minus consequuntur!
+        </p>
+      </div>
+    </div>
+    <div class="box-6 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
+      <div class="flex justify-center md:justify-end -mt-16">
+        <img
+          class="w-20 h-20 object-cover rounded-full border-2 border-indigo-500"
+          src="@/assets/sword.png"
+        />
+      </div>
+      <div>
+        <h2 class="text-gray-800 text-3xl font-semibold">Killed in Melle</h2>
+        <p class="mt-2 text-gray-600">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae dolores
+          deserunt ea doloremque natus error, rerum quas odio quaerat nam ex
+          commodi hic, suscipit in a veritatis pariatur minus consequuntur!
+        </p>
+      </div>
+    </div>
+    <div class="box-7 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
+      <div class="flex justify-center md:justify-end -mt-16">
+        <img
+          class="w-20 h-20 object-cover rounded-full border-2 border-indigo-500"
+          src="@/assets/time.png"
+        />
+      </div>
+      <div>
+        <h2 class="text-gray-800 text-3xl font-semibold">Time in Game</h2>
+        <p class="mt-2 text-gray-600">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae dolores
+          deserunt ea doloremque natus error, rerum quas odio quaerat nam ex
+          commodi hic, suscipit in a veritatis pariatur minus consequuntur!
+        </p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -136,5 +254,20 @@ export default {
   width: 14.7%;
   margin-left: auto;
   margin-right: auto;
+}
+
+.averageStatistics {
+  display: inline-block;
+}
+
+.box-1,
+.box-2,
+.box-3,
+.box-4,
+.box-5,
+.box-6,
+.box-7 {
+  display: inline-block;
+  margin-right: 3%;
 }
 </style>
