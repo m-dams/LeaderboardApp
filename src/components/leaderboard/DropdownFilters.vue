@@ -37,7 +37,7 @@
           v-on:click="toggleDropdown()"
           ref="btnDropdownRef"
         >
-          Change criteria
+          Apply filter
         </button>
         <div
           v-bind:class="{
@@ -73,7 +73,7 @@
               text-blueGray-700
             "
           >
-            Gathered stars
+            Favourites
           </a>
           <div
             class="
@@ -97,31 +97,7 @@
               text-blueGray-700
             "
           >
-            Killed enemies
-          </a>
-          <div
-            class="
-              h-0
-              my-2
-              border border-solid border-t-0 border-blueGray-800
-              opacity-25
-            "
-          ></div>
-          <a
-            href="#pablo"
-            class="
-              text-sm
-              py-2
-              px-4
-              font-normal
-              block
-              w-full
-              whitespace-nowrap
-              bg-transparent
-              text-blueGray-700
-            "
-          >
-            Total score
+            My position
           </a>
         </div>
       </div>

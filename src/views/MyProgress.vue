@@ -1,26 +1,33 @@
 <template>
+  <header class="page__header">
+    <h1 class="page__title">My progress</h1>
+  </header>
   <div id="myprogress">
     <highcharts
       v-bind:options="chart1"
-      :header="'header'"
+      :header="statistic"
       catchLegendEvents="true"
     />
-    <highcharts v-bind:options="chart2" :header="'header'" />
-    <highcharts v-bind:options="chart2" :header="'header'" />
-    <highcharts v-bind:options="chart2" :header="'header'" />
   </div>
+  <options
+    style="min-width: 16rem"
+    class="statisticOptions"
+    @gatheredStars="statistic = 'Gathered Stars'"
+  ></options>
 </template>
 
 <script>
 import Chart from "../components/chart/Chart";
-
+import Dropdown from "../components/chart/DropdownOptions";
 export default {
   name: "MyProgress",
   components: {
+    options: Dropdown,
     highcharts: Chart,
   },
   data() {
     return {
+      statistic: "",
       chart1: {
         yAxis: {
           title: {
@@ -110,5 +117,24 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.page__header {
+  background-color: var(--sidebar-item-hover);
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.page__title {
+  font-size: 2.5rem;
+  color: white;
+  font-weight: 600;
+  margin: 0;
+}
+
+.statisticOptions {
+  width: 14.7%;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

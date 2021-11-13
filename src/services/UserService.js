@@ -49,4 +49,8 @@ export default {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
   },
+  getInitialUsers() {
+    // DOWNLOAD FIRST 10
+    return apiClient.get(`data/player/?results=10`);
+  },
 };

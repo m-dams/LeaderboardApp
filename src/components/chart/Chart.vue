@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>{{ header }}</h1>
+    <h1 class="chart__title">{{ header }}</h1>
     <highcharts
       :options="chartOptions"
       ref="lineCharts"
@@ -10,6 +10,10 @@
 </template>
 
 <script>
+//  formatDate(dateString) {
+//     let convertedDate = new Date(dateString);
+//     return convertedDate.toDateString();
+//   },
 import { Chart } from "highcharts-vue";
 import Highcharts from "highcharts";
 import stockInit from "highcharts/modules/stock";
@@ -39,3 +43,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.chart__title {
+  font-size: 2rem;
+  color: black;
+  font-weight: 600;
+  margin: 0;
+}
+</style>

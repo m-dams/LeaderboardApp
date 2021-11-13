@@ -102,20 +102,50 @@
             </div>
             <!--body-->
             <div class="relative p-6 flex-auto">
-              <p class="my-4 text-blueGray-500 text-lg leading-relaxed">
-                Best gathered stars: {{ userData.bestGatheredStars }}
-              </p>
-              <p class="my-5 text-blueGray-500 text-lg leading-relaxed">
-                best Enemies Killed By Melee:
-                {{ userData.bestEnemiesKilledByMelee }}
-              </p>
-              <p class="my-6 text-blueGray-500 text-lg leading-relaxed">
-                Best Enemies Killed from distance:
-                {{ userData.bestEnemiesKilledFromDistance }}
-              </p>
-              <p class="my-7 text-blueGray-500 text-lg leading-relaxed">
-                Best duration time: {{ userData.bestDurationTime }}
-              </p>
+              <div>Dane po prawej stronie to procentowa wartość ...</div>
+              <div class="divStars">
+                <p class="my-4 text-blueGray-500 text-lg leading-relaxed">
+                  Best gathered stars: {{ userData.bestGatheredStars }}
+                </p>
+                <p class="my-41 text-blueGray-500 text-lg leading-relaxed">
+                  10%
+                </p>
+              </div>
+              <div class="divMelee">
+                <p class="my-5 text-blueGray-500 text-lg leading-relaxed">
+                  best Enemies Killed By Melee:
+                  {{ userData.bestEnemiesKilledByMelee }}
+                </p>
+                <p class="my-51 text-blueGray-500 text-lg leading-relaxed">
+                  10%
+                </p>
+              </div>
+              <div class="divDistance">
+                <p class="my-6 text-blueGray-500 text-lg leading-relaxed">
+                  Best Enemies Killed from distance:
+                  {{ userData.bestEnemiesKilledFromDistance }}
+                </p>
+                <p class="my-61 text-blueGray-500 text-lg leading-relaxed">
+                  10%
+                </p>
+              </div>
+              <div class="divTime">
+                <p class="my-7 text-blueGray-500 text-lg leading-relaxed">
+                  Best duration time: {{ userData.bestDurationTime }}
+                </p>
+                <p class="my-71 text-blueGray-500 text-lg leading-relaxed">
+                  10%
+                </p>
+              </div>
+              <div class="divLife">
+                <p class="my-7 text-blueGray-500 text-lg leading-relaxed">
+                  Best gathered life points:
+                  {{ userData.bestGatheredLifePoints }}
+                </p>
+                <p class="my-71 text-blueGray-500 text-lg leading-relaxed">
+                  10%
+                </p>
+              </div>
             </div>
             <!--footer-->
             <div
@@ -183,3 +213,30 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.divStars,
+.divTime,
+.divMelee,
+.divDistance,
+.divLife {
+  white-space: nowrap;
+}
+
+.my-4,
+.my-5,
+.my-6,
+.my-7,
+.my-8 {
+  display: inline-block;
+}
+
+.my-41,
+.my-51,
+.my-61,
+.my-71,
+.my-81 {
+  display: inline-block;
+  color: red;
+}
+</style>

@@ -1,11 +1,11 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <Scroll />
 </template>
 
 <script>
+import Scroll from "../components/scrolling/Scroll.vue";
 export default {
+  components: { Scroll },
   name: "About",
 };
 </script>

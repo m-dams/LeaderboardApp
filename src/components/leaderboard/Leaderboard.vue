@@ -1,6 +1,7 @@
 <script>
 import UserService from "../../services/UserService.js";
 import Dropdown from "./Dropdown";
+import DropdownFilters from "./DropdownFilters";
 import Modal from "./Modal";
 import SortButton from "./SortButton";
 import Searchbar from "../searchbar/Searchbar.vue";
@@ -19,8 +20,20 @@ export default {
     };
   },
   name: "index",
-  components: { Modal, SortButton, Searchbar, Dropdown },
+  components: { Modal, SortButton, Searchbar, DropdownFilters, Dropdown },
   methods: {
+    // getNextUser() {
+    //   window.onscroll = () => {
+    //     let bottomOfWindow =
+    //       document.documentElement.scrollTop + window.innerHeight ===
+    //       document.documentElement.offsetHeight;
+    //     if (bottomOfWindow) {
+    //      UserService.getUsers.then((response) => {
+    //         this.users.push(response.data.results[0]);
+    //       });
+    //     }
+    //   };
+    // },
     sort: function (col) {
       console.log(col);
       if (col == this.sortBy) {
@@ -78,7 +91,7 @@ export default {
   },
 
   created() {
-    UserService.getUsers()
+    UserService.getInitialUsers()
       .then((response) => {
         this.users = response.data;
       })
@@ -142,13 +155,19 @@ export default {
     <header class="page__header">
       <h1 class="page__title">Leaderboard</h1>
     </header>
-    <Searchbar v-on:search="(id) => this.showUserCard(id)" />
+    <div class="toolbar">
+      <Dropdown class="criteriaFilter" />
+      <Searchbar
+        class="searchFilter"
+        v-on:search="(id) => this.showUserCard(id)"
+      />
+      <DropdownFilters class="dropdownFilter" />
+    </div>
     <section class="board">
       <div class="container container--narrow" v-cloak>
         <div class="loader v-cloak-visible">
           <p>Let me load some data</p>
         </div>
-        <Dropdown />
         <div class="message message--error v-cloak-hidden" v-if="error">
           Error: {{ error }}
         </div>
@@ -277,6 +296,23 @@ button:focus {
   outline: thin dotted;
 }
 
+.toolbar {
+  white-space: nowrap;
+}
+
+.searchFilter {
+  display: inline-block;
+}
+
+.criteriaFilter {
+  display: inline-block;
+  margin-right: 2%;
+}
+
+.dropdownFilter {
+  display: inline-block;
+}
+
 .favourite_button {
   size: 200%;
   padding-right: 30%;
@@ -285,7 +321,7 @@ button:focus {
 .page__header,
 .page__footer {
   background-color: var(--sidebar-item-hover);
-  padding: 1rem 0;
+  padding: 0.6rem 0;
   text-align: center;
 }
 
@@ -298,7 +334,7 @@ button:focus {
 }
 
 .page__title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: white;
   font-weight: 600;
   margin: 0;

@@ -37,7 +37,7 @@
           v-on:click="toggleDropdown()"
           ref="btnDropdownRef"
         >
-          Change criteria
+          Choose statistic
         </button>
         <div
           v-bind:class="{
@@ -60,6 +60,7 @@
           ref="popoverDropdownRef"
         >
           <a
+            @click="$emit('gatheredStars')"
             href="#pablo"
             class="
               text-sm
@@ -122,6 +123,102 @@
             "
           >
             Total score
+          </a>
+          <div
+            class="
+              h-0
+              my-2
+              border border-solid border-t-0 border-blueGray-800
+              opacity-25
+            "
+          ></div>
+          <a
+            href="#pablo"
+            class="
+              text-sm
+              py-2
+              px-4
+              font-normal
+              block
+              w-full
+              whitespace-nowrap
+              bg-transparent
+              text-blueGray-700
+            "
+          >
+            Gathered Life Points
+          </a>
+          <div
+            class="
+              h-0
+              my-2
+              border border-solid border-t-0 border-blueGray-800
+              opacity-25
+            "
+          ></div>
+          <a
+            href="#pablo"
+            class="
+              text-sm
+              py-2
+              px-4
+              font-normal
+              block
+              w-full
+              whitespace-nowrap
+              bg-transparent
+              text-blueGray-700
+            "
+          >
+            Enemies Killed By Melee
+          </a>
+          <div
+            class="
+              h-0
+              my-2
+              border border-solid border-t-0 border-blueGray-800
+              opacity-25
+            "
+          ></div>
+          <a
+            href="#pablo"
+            class="
+              text-sm
+              py-2
+              px-4
+              font-normal
+              block
+              w-full
+              whitespace-nowrap
+              bg-transparent
+              text-blueGray-700
+            "
+          >
+            Enemies Killed From Distance
+          </a>
+          <div
+            class="
+              h-0
+              my-2
+              border border-solid border-t-0 border-blueGray-800
+              opacity-25
+            "
+          ></div>
+          <a
+            href="#pablo"
+            class="
+              text-sm
+              py-2
+              px-4
+              font-normal
+              block
+              w-full
+              whitespace-nowrap
+              bg-transparent
+              text-blueGray-700
+            "
+          >
+            Game Duration Time
           </a>
         </div>
       </div>
