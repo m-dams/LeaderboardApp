@@ -155,6 +155,7 @@ export default {
         p-6
         px-4
         py-6
+        z-30
         pointer-events-none
       "
     >

@@ -4,17 +4,22 @@ import Dropdown from "./Dropdown";
 import DropdownFilters from "./DropdownFilters";
 import Modal from "./Modal";
 import SortButton from "./SortButton";
+import { notify } from "notiwind";
 import Searchbar from "../searchbar/Searchbar.vue";
 export default {
   data() {
     return {
+      criterium: "Total Score",
       activeCamper: null,
       users: [],
       error: null,
       isFetching: true,
       order: -1,
       showModal: false,
+      gameId: null,
       gameDetail: null,
+      pullingModal: null,
+      pullingLeaderboard: null,
       sortBy: "besttotalScore",
       favourites: ["michu"],
     };
@@ -42,10 +47,14 @@ export default {
         this.sortBy = col;
       }
     },
-    showUserCard: async function (i, gameId) {
+    showUserCard: function (i, gameId) {
       this.showModal = true;
       this.activeCamper = i;
-      await UserService.getGameDetail(gameId)
+      this.gameId = gameId;
+      this.fetchModalData();
+    },
+    fetchModalData: async function () {
+      await UserService.getGameDetail(this.gameId)
         .then((response) => {
           this.gameDetail = response.data;
         })
@@ -55,6 +64,21 @@ export default {
             this.notify_error(error.response.data.error);
           }
         });
+    },
+    fetchLeaderboardData: async function () {
+      UserService.getInitialUsers()
+        .then((response) => {
+          this.users = response.data;
+          console.log("pull");
+        })
+        .catch((err) => {
+          this.error = err.message;
+          console.error(err.message);
+        });
+    },
+    closeModal: function () {
+      this.showModal = false;
+      clearInterval(this.pullingModal);
     },
     beforeEnter: function (el) {
       el.style.opacity = 0;
@@ -88,19 +112,62 @@ export default {
           }
         });
     },
+    changeToScore: function () {
+      console.log("Score");
+      this.notify_generic("Total score is the new leaderboard criterium");
+      this.criterium = "Total Score";
+    },
+    changeToStars: function () {
+      console.log("Stars");
+      this.notify_generic(
+        "Number of gathered stars is the new leaderboard criterium"
+      );
+      this.criterium = "Gathered Stars";
+    },
+    changeToKilled: function () {
+      console.log("killed");
+      this.notify_generic(
+        "Number of killed enemies is the new leaderboard criterium"
+      );
+      this.criterium = "Killed Enemies";
+    },
+    favouritesFilter: function () {
+      console.log("favourites");
+      this.notify_generic("Filter has been changed to FAVOURITES");
+    },
+    mypositionFilter: function () {
+      console.log("my position");
+      this.notify_generic("Filter has been changed to MY POSITION");
+    },
+    removeFilter: function () {
+      console.log("Removed filter");
+      this.notify_generic("Filter has been removed");
+    },
+    notify_generic: function (message) {
+      notify(
+        {
+          group: "generic",
+          text: message,
+        },
+        3000
+      );
+    },
   },
 
   created() {
-    UserService.getInitialUsers()
-      .then((response) => {
-        this.users = response.data;
-      })
-      .catch((err) => {
-        this.error = err.message;
-        console.error(err.message);
-      });
+    this.fetchLeaderboardData();
+    this.pullingLeaderboard = setInterval(() => {
+      this.fetchLeaderboardData();
+    }, 30000);
   },
-
+  // updated czy mounted????
+  // updated: function () {
+  //   if (showModal) {
+  //     this.pullingModal = setInterval(() => {
+  //       this.fetchModalData();
+  //     }, 2000);
+  //   }
+  // },
   computed: {
     sortedList: function () {
       return this.users.sort((a, b) => {
@@ -137,6 +204,9 @@ export default {
       return this.order === 1 ? "ascending" : "descending";
     },
   },
+  beforeUnmount() {
+    clearInterval(this.pullingLeaderboard);
+  },
   filters: {
     number: function (num) {
       return new Intl.NumberFormat().format(num);
@@ -156,12 +226,22 @@ export default {
       <h1 class="page__title">Leaderboard</h1>
     </header>
     <div class="toolbar">
-      <Dropdown class="criteriaFilter" />
+      <Dropdown
+        class="criteriaFilter"
+        @changeToScore="changeToScore()"
+        @changeToKilled="changeToKilled()"
+        @changeToStars="changeToStars()"
+      />
       <Searchbar
         class="searchFilter"
         v-on:search="(id) => this.showUserCard(id)"
       />
-      <DropdownFilters class="dropdownFilter" />
+      <DropdownFilters
+        class="dropdownFilter"
+        @mypositionFilter="mypositionFilter()"
+        @favouritesFilter="favouritesFilter()"
+        @removeFilter="removeFilter()"
+      />
     </div>
     <section class="board">
       <div class="container container--narrow" v-cloak>
@@ -204,7 +284,7 @@ export default {
                 :class-names="alltimeClass"
                 aria-label="Sort by alltime points"
                 @clicked="sort('besttotalScore')"
-                >Total score</SortButton
+                >{{ criterium }}</SortButton
               >
             </div>
           </div>
@@ -222,6 +302,11 @@ export default {
               :key="userObject.nickname"
               :data-index="i"
               class="table__row"
+              v-bind:style="[
+                userObject.isFinished
+                  ? { background: white }
+                  : { background: green },
+              ]"
               role="row"
             >
               <div class="table__cell table__cell--favourite" role="gridcell">
@@ -271,7 +356,7 @@ export default {
       :gameDetail="gameDetail"
       :userData="users[activeCamper]"
       aria-label="User card"
-      @close="showModal = false"
+      @close="closeModal()"
     >
     </Modal>
   </div>

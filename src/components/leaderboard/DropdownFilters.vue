@@ -60,6 +60,7 @@
           ref="popoverDropdownRef"
         >
           <a
+            @click="$emit('favouritesFilter')"
             href="#pablo"
             class="
               text-sm
@@ -72,6 +73,7 @@
               bg-transparent
               text-blueGray-700
             "
+            v-on:click="toggleDropdown()"
           >
             Favourites
           </a>
@@ -84,6 +86,7 @@
             "
           ></div>
           <a
+            @click="$emit('mypositionFilter')"
             href="#pablo"
             class="
               text-sm
@@ -96,8 +99,35 @@
               bg-transparent
               text-blueGray-700
             "
+            v-on:click="toggleDropdown()"
           >
             My position
+          </a>
+          <div
+            class="
+              h-0
+              my-2
+              border border-solid border-t-0 border-blueGray-800
+              opacity-25
+            "
+          ></div>
+          <a
+            @click="$emit('removeFilter')"
+            href="#pablo"
+            class="
+              text-sm
+              py-2
+              px-4
+              font-normal
+              block
+              w-full
+              whitespace-nowrap
+              bg-transparent
+              text-blueGray-700
+            "
+            v-on:click="toggleDropdown()"
+          >
+            Remove filters
           </a>
         </div>
       </div>

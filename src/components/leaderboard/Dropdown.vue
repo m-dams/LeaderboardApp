@@ -60,6 +60,7 @@
           ref="popoverDropdownRef"
         >
           <a
+            @click="$emit('changeToStars')"
             href="#pablo"
             class="
               text-sm
@@ -72,6 +73,7 @@
               bg-transparent
               text-blueGray-700
             "
+            v-on:click="toggleDropdown()"
           >
             Gathered stars
           </a>
@@ -84,6 +86,7 @@
             "
           ></div>
           <a
+            @click="$emit('changeToKilled')"
             href="#pablo"
             class="
               text-sm
@@ -96,6 +99,7 @@
               bg-transparent
               text-blueGray-700
             "
+            v-on:click="toggleDropdown()"
           >
             Killed enemies
           </a>
@@ -108,6 +112,7 @@
             "
           ></div>
           <a
+            @click="$emit('changeToScore')"
             href="#pablo"
             class="
               text-sm
@@ -120,6 +125,7 @@
               bg-transparent
               text-blueGray-700
             "
+            v-on:click="toggleDropdown()"
           >
             Total score
           </a>
