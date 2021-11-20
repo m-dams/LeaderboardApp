@@ -9,8 +9,14 @@ import Searchbar from "../searchbar/Searchbar.vue";
 export default {
   data() {
     return {
-      criterium: "Total Score",
+      criteriumName: "Total Score",
+      criterium: "totalScore",
       activeCamper: null,
+      limitF: 10,
+      offsetF: 0,
+      filterByF: "totalScore",
+      sortF: "DESC",
+      favouritesF: false,
       users: [],
       error: null,
       isFetching: true,
@@ -21,7 +27,7 @@ export default {
       pullingModal: null,
       pullingLeaderboard: null,
       sortBy: "besttotalScore",
-      favourites: ["michu"],
+      favourites: [],
     };
   },
   name: "index",
@@ -54,7 +60,7 @@ export default {
       this.fetchModalData();
     },
     fetchModalData: async function () {
-      await UserService.getGameDetail(this.gameId)
+      await UserService.getGameDetails(this.gameId)
         .then((response) => {
           this.gameDetail = response.data;
         })
@@ -66,11 +72,16 @@ export default {
         });
     },
     fetchLeaderboardData: async function () {
-      UserService.getInitialUsers()
+      UserService.getRankingGames(
+        this.limitF,
+        this.offsetF,
+        this.filterByF,
+        this.sortF,
+        this.favouritesF
+      )
         .then((response) => {
           this.users = response.data;
-          console.log("pull");
-          console.log(this.users[0]);
+          console.log(this.users);
         })
         .catch((err) => {
           this.error = err.message;
@@ -94,53 +105,85 @@ export default {
       }, delay);
     },
     isFavourite: function (favourite) {
-      for (var i = 0; i < this.favourites.length; i++) {
-        if (this.favourites[i] == favourite) {
-          return true;
-        }
+      if (this.favourites.includes(favourite)) {
+        return true;
+      } else {
+        return false;
       }
-      return false;
     },
     addToFavourite: async function (nickname) {
-      await UserService.postAddToFavourite(nickname)
+      console.log(nickname);
+      await UserService.postAddToFavourites(nickname)
         .then((response) => {
-          this.favourites = response.data.favourites;
+          this.favourites.push(nickname);
         })
         .catch((error) => {
           if (error.response) {
-            console.log(error.response.data.error);
             this.notify_error(error.response.data.error);
           }
         });
     },
-    changeToScore: function () {
+    removeFromFavourite: async function (nickname) {
+      console.log(nickname);
+      await UserService.postRemoveFromFavourites(nickname)
+        .then((response) => {
+          if (this.favourites.includes(nickname)) {
+            const index = this.favourites.indexOf(nickname);
+            this.favourites.splice(index, 1);
+          }
+        })
+        .catch((error) => {
+          if (error.response) {
+            this.notify_error(error.response.data.error);
+          }
+        });
+    },
+    changeToScore: async function () {
+      this.filterByF = "totalScore";
+      await this.fetchLeaderboardData();
       console.log("Score");
       this.notify_generic("Total score is the new leaderboard criterium");
-      this.criterium = "Total Score";
+      this.criteriumName = "Total Score";
+      this.criterium = "totalScore";
     },
-    changeToStars: function () {
+    changeToStars: async function () {
+      this.filterByF = "gatheredStars";
+      await this.fetchLeaderboardData();
       console.log("Stars");
       this.notify_generic(
         "Number of gathered stars is the new leaderboard criterium"
       );
-      this.criterium = "Gathered Stars";
+      this.criteriumName = "Gathered Stars";
+      this.criterium = "gatheredStars";
     },
-    changeToKilled: function () {
+    changeToKilled: async function () {
+      this.filterByF = "enemiesKilled";
+      await this.fetchLeaderboardData();
       console.log("killed");
       this.notify_generic(
         "Number of killed enemies is the new leaderboard criterium"
       );
-      this.criterium = "Killed Enemies";
+      this.criteriumName = "Killed Enemies";
+      this.criterium = "enemiesKilled";
     },
-    favouritesFilter: function () {
+    favouritesFilter: async function () {
+      this.favouritesF = true;
+      await this.fetchLeaderboardData();
       console.log("favourites");
       this.notify_generic("Filter has been changed to FAVOURITES");
     },
-    mypositionFilter: function () {
+    mypositionFilter: async function () {
       console.log("my position");
+      await this.fetchLeaderboardData();
       this.notify_generic("Filter has been changed to MY POSITION");
     },
-    removeFilter: function () {
+    removeFilter: async function () {
+      this.limitF = 10;
+      this.offsetF = 0;
+      this.filterByF = "totalScore";
+      this.sortF = "DESC";
+      this.favouritesF = false;
+      await this.fetchLeaderboardData();
       console.log("Removed filter");
       this.notify_generic("Filter has been removed");
     },
@@ -153,9 +196,27 @@ export default {
         3000
       );
     },
+    notify_error: function (message) {
+      notify(
+        {
+          group: "error",
+          title: "Error",
+          text: message,
+        },
+        3000
+      );
+    },
   },
 
-  created() {
+  async created() {
+    await UserService.getUserDetails()
+      .then((response) => {
+        this.favourites = response.data.favourites.map((e) => e.nickname);
+      })
+      .catch((err) => {
+        this.error = err.message;
+        console.error(err.message);
+      });
     this.fetchLeaderboardData();
     this.pullingLeaderboard = setInterval(() => {
       this.fetchLeaderboardData();
@@ -284,8 +345,8 @@ export default {
               <SortButton
                 :class-names="alltimeClass"
                 aria-label="Sort by alltime points"
-                @clicked="sort('besttotalScore')"
-                >{{ criterium }}</SortButton
+                @clicked="sort('totalScore')"
+                >{{ criteriumName }}</SortButton
               >
             </div>
           </div>
@@ -312,7 +373,7 @@ export default {
                 <button
                   class="favourite_button"
                   v-if="isFavourite(userObject.nickname)"
-                  @click.prevent="addToFavourite(userObject.nickname)"
+                  @click.prevent="removeFromFavourite(userObject.nickname)"
                 >
                   <i id="icon" class="fas fa-star text-yellow-300 fa-2x"></i>
                 </button>
@@ -339,11 +400,28 @@ export default {
               </div>
 
               <div
+                v-if="criterium === 'totalScore'"
                 class="table__cell table__cell--points"
                 role="gridcell"
                 :key="users"
               >
-                {{ userObject.besttotalScore }}
+                {{ userObject.totalScore }}
+              </div>
+              <div
+                v-if="criterium === 'enemiesKilled'"
+                class="table__cell table__cell--points"
+                role="gridcell"
+                :key="users"
+              >
+                {{ userObject.enemiesKilled }}
+              </div>
+              <div
+                v-if="criterium === 'gatheredStars'"
+                class="table__cell table__cell--points"
+                role="gridcell"
+                :key="users"
+              >
+                {{ userObject.gatheredStars }}
               </div>
             </div>
           </transition-group>

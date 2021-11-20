@@ -105,7 +105,7 @@
               <div>Dane po prawej stronie to procentowa wartość ...</div>
               <div class="divStars">
                 <p class="my-4 text-blueGray-500 text-lg leading-relaxed">
-                  Best gathered stars: {{ userData.bestGatheredStars }}
+                  Best gathered stars: {{ userData.gatheredStars }}
                 </p>
                 <p class="my-41 text-blueGray-500 text-lg leading-relaxed">
                   10%
@@ -114,7 +114,7 @@
               <div class="divMelee">
                 <p class="my-5 text-blueGray-500 text-lg leading-relaxed">
                   best Enemies Killed By Melee:
-                  {{ userData.bestEnemiesKilledByMelee }}
+                  {{ userData.enemiesType1KilledByMelee }}
                 </p>
                 <p class="my-51 text-blueGray-500 text-lg leading-relaxed">
                   10%
@@ -123,7 +123,7 @@
               <div class="divDistance">
                 <p class="my-6 text-blueGray-500 text-lg leading-relaxed">
                   Best Enemies Killed from distance:
-                  {{ userData.bestEnemiesKilledFromDistance }}
+                  {{ userData.enemiesType1KilledFromDistance }}
                 </p>
                 <p class="my-61 text-blueGray-500 text-lg leading-relaxed">
                   10%
@@ -140,7 +140,7 @@
               <div class="divLife">
                 <p class="my-7 text-blueGray-500 text-lg leading-relaxed">
                   Best gathered life points:
-                  {{ userData.bestGatheredLifePoints }}
+                  {{ userData.gatheredLifePoints }}
                 </p>
                 <p class="my-71 text-blueGray-500 text-lg leading-relaxed">
                   10%

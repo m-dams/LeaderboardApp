@@ -36,7 +36,7 @@
         <h2 class="text-gray-800 text-3xl font-semibold">Killed Enemies</h2>
         <br />
         <h2 class="text-gray-800 text-6xl font-semibold">
-          {{ userData.totalGatheredStars }}
+          {{ userData.bestType1EnemiesKilledFromDistance }}
         </h2>
       </div>
     </div>
@@ -51,7 +51,7 @@
         <h2 class="text-gray-800 text-3xl font-semibold">Gathered Stars</h2>
         <br />
         <h2 class="text-gray-800 text-6xl font-semibold">
-          {{ userData.totalGatheredStars }}
+          {{ userData.bestGatheredStars }}
         </h2>
       </div>
     </div>
@@ -66,7 +66,7 @@
         <h2 class="text-gray-800 text-3xl font-semibold">Total Points</h2>
         <br />
         <h2 class="text-gray-800 text-6xl font-semibold">
-          {{ userData.totalGatheredStars }}
+          {{ userData.besttotalScore }}
         </h2>
       </div>
     </div>
@@ -83,7 +83,7 @@
         </h2>
         <br />
         <h2 class="text-gray-800 text-6xl font-semibold">
-          {{ userData.totalGatheredStars }}
+          {{ userData.bestGatheredLifePoints }}
         </h2>
       </div>
     </div>
@@ -100,7 +100,7 @@
         </h2>
         <br />
         <h2 class="text-gray-800 text-6xl font-semibold">
-          {{ userData.totalGatheredStars }}
+          {{ userData.bestType1EnemiesKilledFromDistance }}
         </h2>
       </div>
     </div>
@@ -115,7 +115,7 @@
         <h2 class="text-gray-800 text-3xl font-semibold">Killed in Melee</h2>
         <br />
         <h2 class="text-gray-800 text-6xl font-semibold">
-          {{ userData.totalGatheredStars }}
+          {{ userData.bestType1EnemiesKilledByMelee }}
         </h2>
       </div>
     </div>
@@ -130,7 +130,7 @@
         <h2 class="text-gray-800 text-3xl font-semibold">Time in Game</h2>
         <br />
         <h2 class="text-gray-800 text-6xl font-semibold">
-          {{ userData.totalGatheredStars }}
+          {{ userData.bestGatheredStars }}
         </h2>
       </div>
     </div>
@@ -201,7 +201,9 @@ export default {
           this.value = this.allGames.map((e) => e.gatheredStars);
           break;
         case "Killed enemies":
-          this.value = this.allGames.map((e) => e.enemiesKilledByMelee);
+          this.value = this.allGames.map(
+            (e) => e.bestType1EnemiesKilledByMelee
+          );
           break;
         case "Points gathered":
           this.value = this.allGames.map((e) => e.totalScore);
@@ -210,10 +212,14 @@ export default {
           this.value = this.allGames.map((e) => e.gatheredLifePoints);
           break;
         case "Emeies killed by mellee":
-          this.value = this.allGames.map((e) => e.enemiesKilledByMelee);
+          this.value = this.allGames.map(
+            (e) => e.bestType1EnemiesKilledByMelee
+          );
           break;
         case "Enemies killed from distance":
-          this.value = this.allGames.map((e) => e.enemiesKilledFromDistance);
+          this.value = this.allGames.map(
+            (e) => e.bestType1EnemiesKilledFromDistance
+          );
           break;
         case "Game duration":
           this.value = this.allGames.map((e) => e.durationTime);
@@ -228,9 +234,8 @@ export default {
       this.timestamp = this.allGames.map((e) => e.date);
 
       for (let i = 0; i < this.allGames.length; i++) {
-        console.log(i);
         this.gameRecord = [];
-        this.gameRecord.push(this.timestamp[i]);
+        this.gameRecord.push(Number(this.timestamp[i]));
         this.gameRecord.push(this.value[i]);
         this.serializedData.push(this.gameRecord);
       }

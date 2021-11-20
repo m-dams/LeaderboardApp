@@ -31,10 +31,14 @@ export default {
     });
   },
   postAddToFavourites(nickname) {
-    return apiClient.post("/user/add-to-favourites" + nickname);
+    return apiClient.post("/user/add-to-favourites", {
+      favouriteNickname: nickname,
+    });
   },
   postRemoveFromFavourites(nickname) {
-    return apiClient.post("/user/remove-from-favourites" + nickname);
+    return apiClient.post("/user/remove-from-favourites", {
+      unfavouriteNickname: nickname,
+    });
   },
   postRefreshToken() {
     return apiClient.post(
