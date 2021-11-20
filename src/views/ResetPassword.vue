@@ -131,7 +131,7 @@
                   class="w-full text-center"
                   @click.prevent="redirect_login()"
                 >
-                  <a href="#pablo" class="text-black-300"
+                  <a class="text-black-300"
                     ><small>Do you want to log in?</small></a
                   >
                 </div>

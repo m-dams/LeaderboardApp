@@ -1,21 +1,21 @@
 import axios from "axios";
 
+const token = localStorage.getItem("token");
+const refreshToken = localStorage.getItem("refreshToken");
+
 const apiClient = axios.create({
   baseURL: "http://localhost:8080",
+  headers: {
+    Authorization: "Bearer " + token.substring(1, token.length - 1),
+  },
 });
 
-axios.defaults.headers.common["Authorization"] =
-  "Bearer " + localStorage.getItem("token");
+// axios.defaults.headers.common["Authorization"] =
+//   "Bearer " + localStorage.getItem("token");
 
 export default {
-  getUsers() {
-    return apiClient.get("/data/player");
-  },
-  getUserId(id) {
-    return apiClient.get("/data/player/" + id);
-  },
   getUserNickname(nickname) {
-    return apiClient.get("/data/player/" + nickname);
+    return apiClient.get("/user/player/" + nickname);
   },
   postLogin(url, email, password) {
     return apiClient.post(url, {
@@ -30,27 +30,49 @@ export default {
       password,
     });
   },
-  getUser() {
-    return apiClient.get("user");
+  postAddToFavourites(nickname) {
+    return apiClient.post("/user/add-to-favourites" + nickname);
   },
-  getUserDetails() {
-    return apiClient.get("/user-details/");
+  postRemoveFromFavourites(nickname) {
+    return apiClient.post("/user/remove-from-favourites" + nickname);
   },
-  getGameDetail() {
-    return apiClient.get("/game-detail/");
-  },
-  postAddToFavourite(nickname) {
-    return apiClient.post("add-to-favourites/", { nickname });
-  },
-  getRefreshToken() {
-    return apiClient.get("refreshToken");
+  postRefreshToken() {
+    return apiClient.post(
+      "/auth/refresh-token" + refreshToken.substring(1, refreshToken.length - 1)
+    );
   },
   logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
   },
   getInitialUsers() {
-    // DOWNLOAD FIRST 10
-    return apiClient.get(`data/player/?results=10`);
+    return apiClient.get(
+      "/game/ranking-games?limit=20&offset=2&filterBy=enemiesKilled&sort=DESC&favourites=false"
+    );
+  },
+  getUserGames(limit, offset) {
+    return apiClient.get(
+      "/user/user-games?limit=" + limit + "&offset=" + offset
+    );
+  },
+  getGameDetails(gameId) {
+    return apiClient.get("/game/game-details/" + gameId);
+  },
+  getUserDetails() {
+    return apiClient.get("/user/user-details");
+  },
+  getRankingGames(limit, offset, filterBy, sort, favourites) {
+    return apiClient.get(
+      "/game/ranking-games?limit=" +
+        limit +
+        "&offset=" +
+        offset +
+        "&filterBy=" +
+        filterBy +
+        "&sort=" +
+        sort +
+        "&favourites=" +
+        favourites
+    );
   },
 };

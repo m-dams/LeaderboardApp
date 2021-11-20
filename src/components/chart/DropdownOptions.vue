@@ -61,7 +61,6 @@
         >
           <a
             @click="$emit('gatheredStars')"
-            href="#pablo"
             class="
               text-sm
               py-2
@@ -85,7 +84,6 @@
             "
           ></div>
           <a
-            href="#pablo"
             class="
               text-sm
               py-2
@@ -109,7 +107,6 @@
             "
           ></div>
           <a
-            href="#pablo"
             class="
               text-sm
               py-2
@@ -133,7 +130,6 @@
             "
           ></div>
           <a
-            href="#pablo"
             class="
               text-sm
               py-2
@@ -157,7 +153,6 @@
             "
           ></div>
           <a
-            href="#pablo"
             class="
               text-sm
               py-2
@@ -181,7 +176,6 @@
             "
           ></div>
           <a
-            href="#pablo"
             class="
               text-sm
               py-2
@@ -205,7 +199,6 @@
             "
           ></div>
           <a
-            href="#pablo"
             class="
               text-sm
               py-2

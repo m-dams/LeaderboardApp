@@ -26,7 +26,9 @@
       <div>
         <h2 class="text-gray-800 text-3xl font-semibold">Killed Enemies</h2>
         <br />
-        <h2 class="text-gray-800 text-6xl font-semibold">35.53</h2>
+        <h2 class="text-gray-800 text-6xl font-semibold">
+          {{ userData.totalGatheredStars }}
+        </h2>
       </div>
     </div>
     <div class="box-2 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
@@ -39,7 +41,9 @@
       <div>
         <h2 class="text-gray-800 text-3xl font-semibold">Gathered Stars</h2>
         <br />
-        <h2 class="text-gray-800 text-6xl font-semibold">35.53</h2>
+        <h2 class="text-gray-800 text-6xl font-semibold">
+          {{ userData.totalGatheredStars }}
+        </h2>
       </div>
     </div>
     <div class="box-3 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
@@ -52,7 +56,9 @@
       <div>
         <h2 class="text-gray-800 text-3xl font-semibold">Total Points</h2>
         <br />
-        <h2 class="text-gray-800 text-6xl font-semibold">35.53</h2>
+        <h2 class="text-gray-800 text-6xl font-semibold">
+          {{ userData.totalGatheredStars }}
+        </h2>
       </div>
     </div>
     <div class="box-4 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
@@ -67,7 +73,9 @@
           Gathered Life Points
         </h2>
         <br />
-        <h2 class="text-gray-800 text-6xl font-semibold">35.53</h2>
+        <h2 class="text-gray-800 text-6xl font-semibold">
+          {{ userData.totalGatheredStars }}
+        </h2>
       </div>
     </div>
     <div class="box-5 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
@@ -82,7 +90,9 @@
           Killed from Distance
         </h2>
         <br />
-        <h2 class="text-gray-800 text-6xl font-semibold">35.53</h2>
+        <h2 class="text-gray-800 text-6xl font-semibold">
+          {{ userData.totalGatheredStars }}
+        </h2>
       </div>
     </div>
     <div class="box-6 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
@@ -93,9 +103,11 @@
         />
       </div>
       <div>
-        <h2 class="text-gray-800 text-3xl font-semibold">Killed in Melle</h2>
+        <h2 class="text-gray-800 text-3xl font-semibold">Killed in Melee</h2>
         <br />
-        <h2 class="text-gray-800 text-6xl font-semibold">{{ userData }}</h2>
+        <h2 class="text-gray-800 text-6xl font-semibold">
+          {{ userData.totalGatheredStars }}
+        </h2>
       </div>
     </div>
     <div class="box-7 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
@@ -107,11 +119,10 @@
       </div>
       <div>
         <h2 class="text-gray-800 text-3xl font-semibold">Time in Game</h2>
-        <p class="mt-2 text-gray-600">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae dolores
-          deserunt ea doloremque natus error, rerum quas odio quaerat nam ex
-          commodi hic, suscipit in a veritatis pariatur minus consequuntur!
-        </p>
+        <br />
+        <h2 class="text-gray-800 text-6xl font-semibold">
+          {{ userData.totalGatheredStars }}
+        </h2>
       </div>
     </div>
   </div>

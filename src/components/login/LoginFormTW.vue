@@ -149,15 +149,13 @@
               </div>
               <div class="flex flex-wrap mt-6 z-50">
                 <div class="w-1/2" @click.prevent="redirect_reset()">
-                  <a href="#pablo" class="text-black-300"
-                    ><small>Forgot password?</small></a
-                  >
+                  <a class="text-black-300"><small>Forgot password?</small></a>
                 </div>
                 <div
                   class="w-1/3 text-right"
                   @click.prevent="redirect_signup()"
                 >
-                  <a href="#pablo" class="text-black-300"
+                  <a class="text-black-300"
                     ><small>Create new account</small></a
                   >
                 </div>
@@ -193,7 +191,7 @@ export default {
       const url = "http://localhost:8080/auth/login";
       await UserService.postLogin(url, email, password)
         .then((response) => {
-          this.message = response.data.message;
+          this.message = "Login successful";
           this.verified = response.data.verified;
           this.token = response.data.token;
           this.refreshToken = response.data.refreshToken;
@@ -215,7 +213,7 @@ export default {
           }
         });
 
-      if (this.verified == true) {
+      if (this.token) {
         router.push("Leaderboard");
         Sidebar.updated;
       }

@@ -27,18 +27,18 @@ export default {
   name: "index",
   components: { Modal, SortButton, Searchbar, DropdownFilters, Dropdown },
   methods: {
-    // getNextUser() {
-    //   window.onscroll = () => {
-    //     let bottomOfWindow =
-    //       document.documentElement.scrollTop + window.innerHeight ===
-    //       document.documentElement.offsetHeight;
-    //     if (bottomOfWindow) {
-    //      UserService.getUsers.then((response) => {
-    //         this.users.push(response.data.results[0]);
-    //       });
-    //     }
-    //   };
-    // },
+    getNextUser() {
+      window.onscroll = () => {
+        let bottomOfWindow =
+          document.documentElement.scrollTop + window.innerHeight ===
+          document.documentElement.offsetHeight;
+        if (bottomOfWindow) {
+          UserService.getUsers.then((response) => {
+            this.users.push(response.data.results[0]);
+          });
+        }
+      };
+    },
     sort: function (col) {
       console.log(col);
       if (col == this.sortBy) {
@@ -70,6 +70,7 @@ export default {
         .then((response) => {
           this.users = response.data;
           console.log("pull");
+          console.log(this.users[0]);
         })
         .catch((err) => {
           this.error = err.message;
@@ -299,20 +300,17 @@ export default {
           >
             <div
               v-for="(userObject, i) in sortedList"
-              :key="userObject.nickname"
+              :key="i"
               :data-index="i"
               class="table__row"
               v-bind:style="[
-                userObject.isFinished
-                  ? { background: white }
-                  : { background: green },
+                !userObject.isFinished ? { background: '#228B22' } : {},
               ]"
               role="row"
             >
               <div class="table__cell table__cell--favourite" role="gridcell">
                 <button
                   class="favourite_button"
-                  :key="favourites"
                   v-if="isFavourite(userObject.nickname)"
                   @click.prevent="addToFavourite(userObject.nickname)"
                 >
@@ -320,7 +318,6 @@ export default {
                 </button>
                 <button
                   class="favourite_button"
-                  :key="favourites"
                   v-else
                   @click.prevent="addToFavourite(userObject.nickname)"
                 >
@@ -341,7 +338,11 @@ export default {
                 </button>
               </div>
 
-              <div class="table__cell table__cell--points" role="gridcell">
+              <div
+                class="table__cell table__cell--points"
+                role="gridcell"
+                :key="users"
+              >
                 {{ userObject.besttotalScore }}
               </div>
             </div>

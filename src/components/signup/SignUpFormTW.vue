@@ -164,7 +164,7 @@
                   class="w-full text-center"
                   @click.prevent="redirect_login()"
                 >
-                  <a href="#pablo" class="text-black-300"
+                  <a class="text-black-300"
                     ><small>Already have an account?</small></a
                   >
                 </div>
@@ -202,9 +202,9 @@ export default {
           this.message = "Your account has been successuly registered";
           this.emailVerified = response.data.emailVerified;
           this.token = response.data.token;
-          if (response.data.token) {
-            localStorage.setItem("user", JSON.stringify(response.data));
-          }
+          // if (response.data.token) {
+          //   localStorage.setItem("token", JSON.stringify(response.data.token));
+          // }
           this.notify_success(this.message);
           router.push("Login");
         })

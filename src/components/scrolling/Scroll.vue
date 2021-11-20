@@ -24,7 +24,7 @@
 
 <script>
 import axios from "axios";
-
+import UserService from "../../services/UserService";
 export default {
   data() {
     return {
@@ -37,8 +37,10 @@ export default {
       return convertedDate.toDateString();
     },
     getInitialUsers() {
-      axios.get(`https://randomuser.me/api/?results=7`).then((response) => {
-        this.users = response.data.results;
+      UserService.getInitialUsers().then((response) => {
+        this.users = response.data;
+        // axios.get(`https://randomuser.me/api/?results=7`).then((response) => {
+        //   this.users = response.data.results;
       });
     },
     getNextUser() {
