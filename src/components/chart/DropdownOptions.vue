@@ -60,7 +60,9 @@
           ref="popoverDropdownRef"
         >
           <a
-            @click="$emit('gatheredStars')"
+            @click="$emit('changeToGatheredStars')"
+            v-on:click="toggleDropdown()"
+            href="#pablo"
             class="
               text-sm
               py-2
@@ -84,6 +86,9 @@
             "
           ></div>
           <a
+            @click="$emit('changeToKilled')"
+            v-on:click="toggleDropdown()"
+            href="#pablo"
             class="
               text-sm
               py-2
@@ -107,6 +112,9 @@
             "
           ></div>
           <a
+            @click="$emit('changeToTotalScore')"
+            v-on:click="toggleDropdown()"
+            href="#pablo"
             class="
               text-sm
               py-2
@@ -130,6 +138,9 @@
             "
           ></div>
           <a
+            @click="$emit('changeToLifePoints')"
+            v-on:click="toggleDropdown()"
+            href="#pablo"
             class="
               text-sm
               py-2
@@ -153,6 +164,9 @@
             "
           ></div>
           <a
+            @click="$emit('changeToKilledByMelee')"
+            v-on:click="toggleDropdown()"
+            href="#pablo"
             class="
               text-sm
               py-2
@@ -176,6 +190,9 @@
             "
           ></div>
           <a
+            @click="$emit('changeToKilledFromDistance')"
+            v-on:click="toggleDropdown()"
+            href="#pablo"
             class="
               text-sm
               py-2
@@ -199,6 +216,9 @@
             "
           ></div>
           <a
+            @click="$emit('changeToGameDuration')"
+            v-on:click="toggleDropdown()"
+            href="#pablo"
             class="
               text-sm
               py-2

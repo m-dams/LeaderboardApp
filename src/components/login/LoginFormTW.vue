@@ -149,13 +149,15 @@
               </div>
               <div class="flex flex-wrap mt-6 z-50">
                 <div class="w-1/2" @click.prevent="redirect_reset()">
-                  <a class="text-black-300"><small>Forgot password?</small></a>
+                  <a class="text-black-300" href="#pablo"
+                    ><small>Forgot password?</small></a
+                  >
                 </div>
                 <div
                   class="w-1/3 text-right"
                   @click.prevent="redirect_signup()"
                 >
-                  <a class="text-black-300"
+                  <a class="text-black-300" href="#pablo"
                     ><small>Create new account</small></a
                   >
                 </div>

@@ -5,6 +5,7 @@
   <div id="myprogress">
     <highcharts
       v-bind:options="chart1"
+      :key="serializedData"
       :header="statistic"
       :userData="userData"
       catchLegendEvents="true"
@@ -13,7 +14,15 @@
   <options
     style="min-width: 16rem"
     class="statisticOptions"
-    @gatheredStars="statistic = 'Gathered Stars'"
+    @changeToGatheredStars="changeStatistic('Gathered stars')"
+    @changeToKilled="changeStatistic('Killed enemies')"
+    @changeToTotalScore="changeStatistic('Points gathered')"
+    @changeToLifePoints="changeStatistic('Gathered life points')"
+    @changeToKilledByMelee="changeStatistic('Emeies killed by mellee')"
+    @changeToKilledFromDistance="
+      changeStatistic('Enemies killed from distance')
+    "
+    @changeToGameDuration="changeStatistic('Game duration')"
   ></options>
   <div class="averageStatistics">
     <div class="box-1 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
@@ -140,7 +149,12 @@ export default {
   },
   data() {
     return {
-      statistic: "",
+      statistic: "Gathered Stars",
+      timestamp: [],
+      value: [],
+      gameRecord: [],
+      allGames: [],
+      serializedData: [],
       userData: JSON,
       chart1: {
         yAxis: {
@@ -150,40 +164,14 @@ export default {
         },
         series: [
           {
-            data: [
-              [1356598400000, 151],
-              [1356598410000, 52],
-              [1362096000000, 10],
-              [1364774400000, 56],
-              [1367366400000, 45],
-              [1370044800000, 11],
-              [1372636800000, 52],
-              [1375315200000, 54],
-              [1377993600000, 32],
-              [1380585600000, 76],
-              [1383264000000, 87],
-              [1385856000000, 54],
-              [1388534400000, 65],
-              [1391212800000, 22],
-              [1393632000000, 71],
-              [1396310400000, 25],
-              [1398902400000, 65],
-              [1401580800000, 42],
-              [1404172800000, 84],
-              [1406851200000, 46],
-              [1412121600000, 10],
-              [1414800000000, 2],
-              [1417392000000, 90],
-              [1420070400000, 63],
-              [1422748800000, 74],
-            ],
+            data: [],
           },
         ],
       },
     };
   },
-  created() {
-    UserService.getUserDetails()
+  async created() {
+    await UserService.getUserDetails()
       .then((response) => {
         this.userData = response.data;
       })
@@ -191,6 +179,64 @@ export default {
         this.error = err.message;
         console.error(err.message);
       });
+    await UserService.getUserGames(1000, 0)
+      .then((response) => {
+        this.allGames = response.data;
+      })
+      .catch((err) => {
+        this.error = err.message;
+        console.error(err.message);
+      });
+    console.log(this.allGames);
+    this.value = this.allGames.map((e) => e.gatheredStars);
+    this.serializeData();
+  },
+  methods: {
+    changeStatistic: function (stat) {
+      this.serializedData = [];
+      this.statistic = stat;
+      this.chart1.yAxis.title.text = stat;
+      switch (stat) {
+        case "Gathered stars":
+          this.value = this.allGames.map((e) => e.gatheredStars);
+          break;
+        case "Killed enemies":
+          this.value = this.allGames.map((e) => e.enemiesKilledByMelee);
+          break;
+        case "Points gathered":
+          this.value = this.allGames.map((e) => e.totalScore);
+          break;
+        case "Gathered life points":
+          this.value = this.allGames.map((e) => e.gatheredLifePoints);
+          break;
+        case "Emeies killed by mellee":
+          this.value = this.allGames.map((e) => e.enemiesKilledByMelee);
+          break;
+        case "Enemies killed from distance":
+          this.value = this.allGames.map((e) => e.enemiesKilledFromDistance);
+          break;
+        case "Game duration":
+          this.value = this.allGames.map((e) => e.durationTime);
+          break;
+        default:
+          this.value = this.allGames.map((e) => e.gatheredStars);
+      }
+      this.serializeData();
+    },
+    serializeData: function () {
+      console.log("all games length " + this.allGames.length);
+      this.timestamp = this.allGames.map((e) => e.date);
+
+      for (let i = 0; i < this.allGames.length; i++) {
+        console.log(i);
+        this.gameRecord = [];
+        this.gameRecord.push(this.timestamp[i]);
+        this.gameRecord.push(this.value[i]);
+        this.serializedData.push(this.gameRecord);
+      }
+
+      this.chart1.series[0].data = this.serializedData;
+    },
   },
 };
 </script>

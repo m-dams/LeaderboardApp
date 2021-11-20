@@ -164,7 +164,7 @@
                   class="w-full text-center"
                   @click.prevent="redirect_login()"
                 >
-                  <a class="text-black-300"
+                  <a class="text-black-300" href="#pablo"
                     ><small>Already have an account?</small></a
                   >
                 </div>
