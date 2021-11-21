@@ -41,7 +41,7 @@
                 rounded-t
               "
             >
-              <h3 class="text-3xl font-semibold">{{ userData.nickname }}</h3>
+              <h3 class="text-3xl font-semibold">{{ username }}</h3>
               <button
                 class="
                   p-1
@@ -215,6 +215,7 @@ export default {
     showModal: Boolean,
     gameDetail: JSON,
     userData: JSON,
+    username: String,
     ariaLabel: {
       type: String,
       required: true,

@@ -11,13 +11,14 @@ export default {
     return {
       criteriumName: "Total Score",
       criterium: "totalScore",
-      activeCamper: null,
       limitF: 2,
       offsetF: 0,
       filterByF: "totalScore",
       sortF: "DESC",
       favouritesF: false,
-      users: [],
+      users: [{ nickname: "" }],
+      activeGames: [],
+      activeUser: 0,
       error: null,
       isFetching: true,
       userDetails: null,
@@ -59,19 +60,26 @@ export default {
         }
       };
     },
-    showUserCard: async function (i, gameId) {
+    showUserCard: async function (gameId, i) {
+      this.activeUser = i;
       this.gameId = gameId;
       await this.fetchModalData();
       this.showModal = true;
-      this.activeCamper = i;
-      this.pullingModal = setInterval(() => {
-        this.fetchModalData();
-      }, 1000);
+      if (this.activeGames.includes(gameId)) {
+        this.pullingModal = setInterval(() => {
+          this.fetchModalData();
+        }, 1000);
+      }
     },
     fetchModalData: async function () {
       await UserService.getGameDetails(this.gameId)
         .then((response) => {
           this.gameDetail = response.data;
+          if (response.data.finished) {
+            const index = this.activeGames.indexOf(this.gameId);
+            this.activeGames.splice(index, 1);
+            clearInterval(this.pullingModal);
+          }
           console.log("Modal data pull");
         })
         .catch((error) => {
@@ -82,7 +90,7 @@ export default {
         });
     },
     fetchLeaderboardData: async function () {
-      UserService.getRankingGames(
+      await UserService.getRankingGames(
         this.limitF,
         this.offsetF,
         this.filterByF,
@@ -92,11 +100,18 @@ export default {
         .then((response) => {
           this.users = response.data;
           console.log("leaderboard data pull");
+          this.activeGames = this.users.reduce((ids, thing) => {
+            if (thing.isFinished == 0) {
+              ids.push(thing.gameId);
+            }
+            return ids;
+          }, []);
         })
         .catch((err) => {
           this.error = err.message;
           console.error(err.message);
         });
+      console.log("Active game id's: " + this.activeGames);
     },
     closeModal: function () {
       this.showModal = false;
@@ -264,7 +279,7 @@ export default {
       />
       <Searchbar
         class="searchFilter"
-        v-on:search="(id) => this.showUserCard(id)"
+        v-on:search="(id) => this.showUserCard(id, 0)"
       />
       <DropdownFilters
         class="dropdownFilter"
@@ -328,7 +343,7 @@ export default {
               :data-index="i"
               class="table__row"
               v-bind:style="[
-                !userObject.isFinished ? { background: '#228B22' } : {},
+                !userObject.isFinished ? { background: '#5FC663' } : {},
               ]"
               role="row"
             >
@@ -356,7 +371,7 @@ export default {
                 <button
                   class="user__name user__name--no-margin"
                   type="button"
-                  @click="showUserCard(i, userObject.gameId)"
+                  @click="showUserCard(userObject.gameId, i)"
                 >
                   {{ userObject.nickname }}
                 </button>
@@ -394,6 +409,7 @@ export default {
 
     <!-- DETAILED VIEW -->
     <Modal
+      :username="users[this.activeUser].nickname"
       :showModal="showModal"
       :gameDetail="gameDetail"
       :userData="userDetails"
