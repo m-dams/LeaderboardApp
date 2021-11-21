@@ -1,31 +1,6 @@
 <template>
   <transition name="modal" mode="in-out" v-if="showModal">
     <div>
-      <button
-        class="
-          bg-pink-500
-          text-white
-          active:bg-pink-600
-          font-bold
-          uppercase
-          text-sm
-          px-6
-          py-3
-          rounded
-          shadow
-          hover:shadow-lg
-          outline-none
-          focus:outline-none
-          mr-1
-          mb-1
-          ease-linear
-          transition-all
-          duration-150
-        "
-        type="button"
-      >
-        Open regular modal
-      </button>
       <div
         v-if="showModal"
         class="
@@ -105,45 +80,85 @@
               <div>Dane po prawej stronie to procentowa wartość ...</div>
               <div class="divStars">
                 <p class="my-4 text-blueGray-500 text-lg leading-relaxed">
-                  Best gathered stars: {{ userData.gatheredStars }}
+                  Best gathered stars: {{ gameDetail.gatheredStars }} =>
                 </p>
-                <p class="my-41 text-blueGray-500 text-lg leading-relaxed">
-                  10%
+                <p
+                  class="my-41 text-blueGray-500 text-lg leading-relaxed"
+                  :key="gatheredStarsR"
+                  v-bind:style="[
+                    gatheredStarsR >= 0
+                      ? { color: '#228B22' }
+                      : { color: '#B90E0A' },
+                  ]"
+                >
+                  {{ gatheredStarsR }}%
                 </p>
               </div>
               <div class="divMelee">
                 <p class="my-5 text-blueGray-500 text-lg leading-relaxed">
                   best Enemies Killed By Melee:
-                  {{ userData.enemiesType1KilledByMelee }}
+                  {{ gameDetail.enemiesType1KilledByMelee }} =>
                 </p>
-                <p class="my-51 text-blueGray-500 text-lg leading-relaxed">
-                  10%
+                <p
+                  class="my-51 text-blueGray-500 text-lg leading-relaxed"
+                  :key="killedByMeleeR"
+                  v-bind:style="[
+                    killedByMeleeR >= 0
+                      ? { color: '#228B22' }
+                      : { color: '#B90E0A' },
+                  ]"
+                >
+                  {{ killedByMeleeR }}%
                 </p>
               </div>
               <div class="divDistance">
                 <p class="my-6 text-blueGray-500 text-lg leading-relaxed">
                   Best Enemies Killed from distance:
-                  {{ userData.enemiesType1KilledFromDistance }}
+                  {{ gameDetail.enemiesType1KilledFromDistance }} =>
                 </p>
-                <p class="my-61 text-blueGray-500 text-lg leading-relaxed">
-                  10%
+                <p
+                  class="my-61 text-blueGray-500 text-lg leading-relaxed"
+                  :key="killedFromDistanceR"
+                  v-bind:style="[
+                    killedFromDistanceR >= 0
+                      ? { color: '#228B22' }
+                      : { color: '#B90E0A' },
+                  ]"
+                >
+                  {{ killedFromDistanceR }}%
                 </p>
               </div>
               <div class="divTime">
                 <p class="my-7 text-blueGray-500 text-lg leading-relaxed">
-                  Best duration time: {{ userData.bestDurationTime }}
+                  Best Total Score: {{ gameDetail.totalScore }} =>
                 </p>
-                <p class="my-71 text-blueGray-500 text-lg leading-relaxed">
-                  10%
+                <p
+                  class="my-71 text-blueGray-500 text-lg leading-relaxed"
+                  :key="totalScoreR"
+                  v-bind:style="[
+                    totalScoreR >= 0
+                      ? { color: '#228B22' }
+                      : { color: '#B90E0A' },
+                  ]"
+                >
+                  {{ totalScoreR }}%
                 </p>
               </div>
               <div class="divLife">
                 <p class="my-7 text-blueGray-500 text-lg leading-relaxed">
                   Best gathered life points:
-                  {{ userData.gatheredLifePoints }}
+                  {{ gameDetail.gatheredLifePoints }} =>
                 </p>
-                <p class="my-71 text-blueGray-500 text-lg leading-relaxed">
-                  10%
+                <p
+                  class="my-71 text-blueGray-500 text-lg leading-relaxed"
+                  :key="lifePointsR"
+                  v-bind:style="[
+                    lifePointsR >= 0
+                      ? { color: '#228B22' }
+                      : { color: '#B90E0A' },
+                  ]"
+                >
+                  {{ lifePointsR }}%
                 </p>
               </div>
             </div>
@@ -205,10 +220,74 @@ export default {
       required: true,
     },
   },
-  setup() {},
+  created() {
+    // if (this.gameDetail !== null) this.gameDetails = this.gameDetail;
+  },
+  data() {
+    return {
+      gatheredStarsR: 1,
+      totalScoreR: 1,
+      killedByMeleeR: 1,
+      killedFromDistanceR: 1,
+      lifePointsR: 1,
+    };
+  },
+  watch: {
+    gameDetail: function () {
+      this.calculateRatio();
+    },
+  },
   methods: {
     mounted: function () {
       this.$refs.closeButton.focus();
+    },
+    calculateRatio: function () {
+      if (this.userData.bestGatheredStars && this.gameDetail.gatheredStars) {
+        this.gatheredStarsR = Math.round(
+          (this.userData.bestGatheredStars / this.gameDetail.gatheredStars) *
+            100 -
+            100
+        );
+      }
+      if (
+        this.userData.bestType1EnemiesKilledByMelee &&
+        this.gameDetail.enemiesType1KilledByMelee
+      ) {
+        this.killedByMeleeR = Math.round(
+          (this.userData.bestType1EnemiesKilledByMelee /
+            this.gameDetail.enemiesType1KilledByMelee) *
+            100 -
+            100
+        );
+      }
+      if (
+        this.userData.bestType1EnemiesKilledFromDistance &&
+        this.gameDetail.enemiesType1KilledFromDistance
+      ) {
+        this.killedFromDistanceR = Math.round(
+          (this.userData.bestType1EnemiesKilledFromDistance /
+            this.gameDetail.enemiesType1KilledFromDistance) *
+            100 -
+            100
+        );
+      }
+      if (this.userData.besttotalScore && this.gameDetail.totalScore) {
+        this.totalScoreR = Math.round(
+          (this.userData.besttotalScore / this.gameDetail.totalScore) * 100 -
+            100
+        );
+      }
+      if (
+        this.userData.bestGatheredLifePoints &&
+        this.gameDetail.gatheredLifePoints
+      ) {
+        this.lifePointsR = Math.round(
+          (this.userData.bestGatheredLifePoints /
+            this.gameDetail.gatheredLifePoints) *
+            100 -
+            100
+        );
+      }
     },
   },
 };

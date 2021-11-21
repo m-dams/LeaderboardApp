@@ -20,6 +20,7 @@ export default {
       users: [],
       error: null,
       isFetching: true,
+      userDetails: null,
       order: -1,
       showModal: false,
       gameId: null,
@@ -53,16 +54,20 @@ export default {
         this.sortBy = col;
       }
     },
-    showUserCard: function (i, gameId) {
+    showUserCard: async function (i, gameId) {
+      this.gameId = gameId;
+      await this.fetchModalData();
       this.showModal = true;
       this.activeCamper = i;
-      this.gameId = gameId;
-      this.fetchModalData();
+      this.pullingModal = setInterval(() => {
+        this.fetchModalData();
+      }, 1000);
     },
     fetchModalData: async function () {
       await UserService.getGameDetails(this.gameId)
         .then((response) => {
           this.gameDetail = response.data;
+          console.log("Modal data pull");
         })
         .catch((error) => {
           if (error.response) {
@@ -81,7 +86,7 @@ export default {
       )
         .then((response) => {
           this.users = response.data;
-          console.log(this.users);
+          console.log("leaderboard data pull");
         })
         .catch((err) => {
           this.error = err.message;
@@ -112,7 +117,6 @@ export default {
       }
     },
     addToFavourite: async function (nickname) {
-      console.log(nickname);
       await UserService.postAddToFavourites(nickname)
         .then((response) => {
           this.favourites.push(nickname);
@@ -124,7 +128,6 @@ export default {
         });
     },
     removeFromFavourite: async function (nickname) {
-      console.log(nickname);
       await UserService.postRemoveFromFavourites(nickname)
         .then((response) => {
           if (this.favourites.includes(nickname)) {
@@ -212,6 +215,7 @@ export default {
     await UserService.getUserDetails()
       .then((response) => {
         this.favourites = response.data.favourites.map((e) => e.nickname);
+        this.userDetails = response.data;
       })
       .catch((err) => {
         this.error = err.message;
@@ -222,14 +226,6 @@ export default {
       this.fetchLeaderboardData();
     }, 30000);
   },
-  // updated czy mounted????
-  // updated: function () {
-  //   if (showModal) {
-  //     this.pullingModal = setInterval(() => {
-  //       this.fetchModalData();
-  //     }, 2000);
-  //   }
-  // },
   computed: {
     sortedList: function () {
       return this.users.sort((a, b) => {
@@ -433,7 +429,7 @@ export default {
     <Modal
       :showModal="showModal"
       :gameDetail="gameDetail"
-      :userData="users[activeCamper]"
+      :userData="userDetails"
       aria-label="User card"
       @close="closeModal()"
     >
