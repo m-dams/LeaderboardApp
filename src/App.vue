@@ -15,7 +15,7 @@ export default {
   created() {
     this.pullRefreshToken = setInterval(() => {
       this.fetchToken();
-    }, 1800000);
+    }, 1000000);
   },
   methods: {
     fetchToken: async function () {

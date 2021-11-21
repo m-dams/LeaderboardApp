@@ -22,7 +22,7 @@
     @changeToKilledFromDistance="
       changeStatistic('Enemies killed from distance')
     "
-    @changeToGameDuration="changeStatistic('Game duration')"
+    @changeToGameDuration="changeStatistic('Game duration[s]')"
   ></options>
   <div class="averageStatistics">
     <div class="box-1 max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-20">
@@ -221,7 +221,7 @@ export default {
             (e) => e.bestType1EnemiesKilledFromDistance
           );
           break;
-        case "Game duration":
+        case "Game duration[s]":
           this.value = this.allGames.map((e) => e.durationTime);
           break;
         default:
@@ -241,6 +241,7 @@ export default {
       }
 
       this.chart1.series[0].data = this.serializedData;
+      this.chart1.series[0].name = this.statistic;
     },
   },
 };

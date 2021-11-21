@@ -77,4 +77,18 @@ export default {
         favourites
     );
   },
+  getNextRankingGames(limit, offset, filterBy, sort, favourites) {
+    return apiClient.get(
+      "/game/ranking-games?limit=" +
+        limit +
+        "&offset=" +
+        offset +
+        "&filterBy=" +
+        filterBy +
+        "&sort=" +
+        sort +
+        "&favourites=" +
+        favourites
+    );
+  },
 };

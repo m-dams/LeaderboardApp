@@ -75,9 +75,6 @@ export default {
     <SidebarLink v-if="componentKey" to="/myprogress" icon="fas fa-chart-line"
       >My progress</SidebarLink
     >
-    <SidebarLink v-if="componentKey" to="/myprofile" icon="fas fa-address-card"
-      >My Profile</SidebarLink
-    >
     <SidebarLink
       v-if="componentKey"
       @click.prevent="logout()"

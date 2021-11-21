@@ -12,7 +12,7 @@ export default {
       criteriumName: "Total Score",
       criterium: "totalScore",
       activeCamper: null,
-      limitF: 10,
+      limitF: 2,
       offsetF: 0,
       filterByF: "totalScore",
       sortF: "DESC",
@@ -27,7 +27,7 @@ export default {
       gameDetail: null,
       pullingModal: null,
       pullingLeaderboard: null,
-      sortBy: "besttotalScore",
+      sortBy: "totalScore",
       favourites: [],
     };
   },
@@ -40,9 +40,22 @@ export default {
           document.documentElement.scrollTop + window.innerHeight ===
           document.documentElement.offsetHeight;
         if (bottomOfWindow) {
-          UserService.getUsers().then((response) => {
-            this.users.push(response.data.results[0]);
+          UserService.getNextRankingGames(
+            3,
+            this.users.length,
+            this.filterByF,
+            this.sortF,
+            this.favouritesF
+          ).then((response) => {
+            if (response.data[0]) this.users.push(response.data[0]);
+            if (response.data[1]) this.users.push(response.data[1]);
+            if (response.data[2]) {
+              this.users.push(response.data[2]);
+            } else {
+              this.notify_generic("You've reached the end of the leaderboard");
+            }
           });
+          this.limitF += 3;
         }
       };
     },
@@ -246,7 +259,7 @@ export default {
         sort: true,
         "sort--desc": this.order === -1,
         "sort--asc": this.order === 1,
-        "sort--active": this.sortBy === "besttotalScore",
+        "sort--active": this.sortBy === "totalScore",
       };
     },
     nicknameClass: function () {
@@ -265,15 +278,8 @@ export default {
   beforeUnmount() {
     clearInterval(this.pullingLeaderboard);
   },
-  filters: {
-    number: function (num) {
-      return new Intl.NumberFormat().format(num);
-    },
-    ordinal: function (num) {
-      const suffixes = ["th", "st", "nd", "rd"];
-      const v = num % 100;
-      return num + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
-    },
+  mounted() {
+    this.getNextUser();
   },
 };
 </script>
@@ -336,7 +342,7 @@ export default {
             <div
               class="table__cell table__cell--points table__cell--small"
               role="columnheader"
-              :aria-sort="sortBy === 'besttotalScore' ? sortOrder : null"
+              :aria-sort="sortBy === 'totalScore' ? sortOrder : null"
             >
               <SortButton
                 :class-names="alltimeClass"

@@ -12,11 +12,6 @@ const routes = [
     component: () => import("../views/Leaderboard.vue"),
   },
   {
-    path: "/myprofile",
-    name: "MyProfile",
-    component: () => import("../views/MyProfile.vue"),
-  },
-  {
     path: "/myprogress",
     name: "MyProgress",
     component: () => import("../views/MyProgress.vue"),
