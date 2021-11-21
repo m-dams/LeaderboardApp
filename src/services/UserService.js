@@ -10,9 +10,6 @@ const apiClient = axios.create({
   },
 });
 
-// axios.defaults.headers.common["Authorization"] =
-//   "Bearer " + localStorage.getItem("token");
-
 export default {
   getUserNickname(nickname) {
     return apiClient.get("/user/player/" + nickname);
@@ -41,13 +38,14 @@ export default {
     });
   },
   postRefreshToken() {
-    return apiClient.post(
-      "/auth/refresh-token" + refreshToken.substring(1, refreshToken.length - 1)
-    );
+    return apiClient.post("/auth/refresh-token", {
+      refreshToken: localStorage
+        .getItem("refreshToken")
+        .substring(1, refreshToken.length - 1),
+    });
   },
   logout() {
     localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
   },
   getInitialUsers() {
     return apiClient.get(

@@ -1,10 +1,38 @@
 <script>
 import Sidebar from "@/components/sidebar/Sidebar";
+import UserService from "./services/UserService";
 import { sidebarWidth } from "@/components/sidebar/state";
 export default {
+  data() {
+    return {
+      pullRefreshToken: null,
+    };
+  },
   components: { Sidebar },
   setup() {
     return { sidebarWidth };
+  },
+  created() {
+    this.pullRefreshToken = setInterval(() => {
+      this.fetchToken();
+    }, 1800000);
+  },
+  methods: {
+    fetchToken: async function () {
+      await UserService.postRefreshToken()
+        .then((response) => {
+          this.token = response.data.token;
+          console.log("token: " + this.token);
+          if (this.token) {
+            localStorage.setItem("token", JSON.stringify(this.token));
+          }
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.log(error.response.data.error);
+          }
+        });
+    },
   },
 };
 </script>

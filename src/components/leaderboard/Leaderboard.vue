@@ -40,7 +40,7 @@ export default {
           document.documentElement.scrollTop + window.innerHeight ===
           document.documentElement.offsetHeight;
         if (bottomOfWindow) {
-          UserService.getUsers.then((response) => {
+          UserService.getUsers().then((response) => {
             this.users.push(response.data.results[0]);
           });
         }
