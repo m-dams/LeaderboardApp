@@ -9,16 +9,8 @@ export default {
       type: String,
       default: "#ccc",
     },
-    classNames: {
-      type: Object,
-      default: () => ({
-        sort: true,
-      }),
-    },
-    ariaLabel: {
-      type: String,
-      required: true,
-    },
+    classNames: String,
+    sortF: String,
   },
   components: {},
   setup() {
@@ -34,9 +26,10 @@ export default {
 </script>
 
 <template>
-  <button :class="classNames" :aria-label="ariaLabel" @click="handleClick">
+  <button :class="classNames" @click="handleClick">
     <slot></slot>
     <svg
+      class="casual_svg"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       version="1.1"
@@ -44,13 +37,27 @@ export default {
       :height="size"
       viewBox="0 0 16 16"
     >
-      <path :fill="color" d="M11 7h-6l3-4z" />
-      <path :fill="color" d="M5 9h6l-3 4z" />
+      <path
+        d="M11 7h-6l3-4z"
+        v-bind:style="[
+          sortF === 'DESC' ? { fill: '#828282' } : { fill: '#03C04A' },
+        ]"
+      />
+      <path
+        v-bind:style="[
+          sortF === 'ASC' ? { fill: '#828282' } : { fill: '#E3242B' },
+        ]"
+        d="M5 9h6l-3 4z"
+      />
     </svg>
   </button>
 </template>
 
 <style scoped>
+.casual_svg {
+  display: inline-block;
+}
+
 .sort {
   align-items: center;
   background-color: transparent;

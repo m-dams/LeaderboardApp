@@ -59,14 +59,6 @@ export default {
         }
       };
     },
-    sort: function (col) {
-      console.log(col);
-      if (col == this.sortBy) {
-        this.order *= -1;
-      } else {
-        this.sortBy = col;
-      }
-    },
     showUserCard: async function (i, gameId) {
       this.gameId = gameId;
       await this.fetchModalData();
@@ -203,6 +195,16 @@ export default {
       console.log("Removed filter");
       this.notify_generic("Filter has been removed");
     },
+    fetchSorted: async function () {
+      if (this.sortF == "ASC") {
+        this.sortF = "DESC";
+      } else {
+        this.sortF = "ASC";
+      }
+      await this.fetchLeaderboardData();
+      console.log("sort " + this.sortF);
+      this.notify_generic("Leaderboard sorted " + this.sortF);
+    },
     notify_generic: function (message) {
       notify(
         {
@@ -238,42 +240,6 @@ export default {
     this.pullingLeaderboard = setInterval(() => {
       this.fetchLeaderboardData();
     }, 30000);
-  },
-  computed: {
-    sortedList: function () {
-      return this.users.sort((a, b) => {
-        if (this.sortBy == "nickname") {
-          return a.nickname.toUpperCase() > b.nickname.toUpperCase()
-            ? this.order
-            : this.order * -1;
-        }
-        if (this.order === 1) {
-          return a[this.sortBy] - b[this.sortBy];
-        } else {
-          return b[this.sortBy] - a[this.sortBy];
-        }
-      });
-    },
-    alltimeClass: function () {
-      return {
-        sort: true,
-        "sort--desc": this.order === -1,
-        "sort--asc": this.order === 1,
-        "sort--active": this.sortBy === "totalScore",
-      };
-    },
-    nicknameClass: function () {
-      return {
-        sort: true,
-        "sort--desc": this.order === -1,
-        "sort--asc": this.order === 1,
-        "sort--active": this.sortBy === "nickname",
-      };
-    },
-
-    sortOrder: function () {
-      return this.order === 1 ? "ascending" : "descending";
-    },
   },
   beforeUnmount() {
     clearInterval(this.pullingLeaderboard);
@@ -316,38 +282,33 @@ export default {
           Error: {{ error }}
         </div>
         <div class="table v-cloak-hidden" role="grid" v-else>
-          <div
-            class="table__header table__header--sticky"
-            role="row toolbar"
-            aria-label="Sorting options"
-            aria-controls="sortable"
-          >
+          <div class="table__header table__header--sticky" role="row toolbar">
             <div class="table__cell table__cell--position" role="columnheader">
               Position
             </div>
 
-            <div
-              class="table__cell table__cell--user"
-              role="columnheader"
-              :aria-sort="sortBy === 'nickname' ? sortOrder : null"
-            >
-              <SortButton
-                :class-names="nicknameClass"
-                aria-label="Sort by nickname"
-                @clicked="sort('nickname')"
-                >Nickname</SortButton
+            <div class="table__cell table__cell--user" role="columnheader">
+              <div
+                class="table__cell table__cell--position"
+                role="columnheader"
               >
+                Nickname
+              </div>
             </div>
 
             <div
               class="table__cell table__cell--points table__cell--small"
               role="columnheader"
-              :aria-sort="sortBy === 'totalScore' ? sortOrder : null"
             >
               <SortButton
-                :class-names="alltimeClass"
-                aria-label="Sort by alltime points"
-                @clicked="sort('totalScore')"
+                :class-names="filterByF"
+                :sortF="sortF"
+                v-bind:style="[
+                  sortF === 'DESC'
+                    ? { color: '#E3242B' }
+                    : { color: '#03C04A' },
+                ]"
+                @clicked="fetchSorted()"
                 >{{ criteriumName }}</SortButton
               >
             </div>
@@ -362,7 +323,7 @@ export default {
             v-on:enter="enter"
           >
             <div
-              v-for="(userObject, i) in sortedList"
+              v-for="(userObject, i) in users"
               :key="i"
               :data-index="i"
               class="table__row"
