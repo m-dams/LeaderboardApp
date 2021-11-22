@@ -11,10 +11,10 @@ export default {
     return {
       criteriumName: "Total Score",
       criterium: "totalScore",
-      limitF: 2,
+      limitF: 3,
       offsetF: 0,
       filterByF: "totalScore",
-      sortF: "DESC",
+      sortF: "ASC",
       favouritesF: false,
       users: [{ nickname: "" }],
       activeGames: [],
@@ -197,14 +197,30 @@ export default {
     },
     mypositionFilter: async function () {
       console.log("my position");
-      await this.fetchLeaderboardData();
+      console.log(this.userDetails.nickname);
+      await UserService.getGameSearch(
+        this.userDetails.nickname,
+        this.filterByF,
+        Math.floor(this.limitF / 2)
+      )
+        .then((response) => {
+          console.log("search user: " + searchNickname);
+          this.users = response.data;
+          this.limitF = 3;
+          this.offsetF = this.users[0].gameId + 1;
+        })
+        .catch((error) => {
+          if (error.response) {
+            this.notify_error("There is no such user: " + searchNickname);
+          }
+        });
       this.notify_generic("Filter has been changed to MY POSITION");
     },
     removeFilter: async function () {
-      this.limitF = 10;
+      this.limitF = 3;
       this.offsetF = 0;
       this.filterByF = "totalScore";
-      this.sortF = "DESC";
+      this.sortF = "ASC";
       this.favouritesF = false;
       await this.fetchLeaderboardData();
       console.log("Removed filter");
@@ -219,6 +235,30 @@ export default {
       await this.fetchLeaderboardData();
       console.log("sort " + this.sortF);
       this.notify_generic("Leaderboard sorted " + this.sortF);
+    },
+    searchNickname: async function (searchNickname) {
+      if (searchNickname.length > 0) {
+        await UserService.getGameSearch(
+          searchNickname,
+          this.filterByF,
+          Math.floor(this.limitF / 2)
+        )
+          .then((response) => {
+            console.log("search user: " + searchNickname);
+            this.users = response.data;
+            this.limitF = 3;
+            this.offsetF = this.users[0].gameId + 1;
+          })
+          .catch((error) => {
+            if (error.response) {
+              this.notify_error("There is no such user: " + searchNickname);
+            }
+          });
+      } else {
+        this.limitF = 3;
+        this.offsetF = 0;
+        await this.fetchLeaderboardData();
+      }
     },
     notify_generic: function (message) {
       notify(
@@ -277,10 +317,7 @@ export default {
         @changeToKilled="changeToKilled()"
         @changeToStars="changeToStars()"
       />
-      <Searchbar
-        class="searchFilter"
-        v-on:search="(id) => this.showUserCard(id, 0)"
-      />
+      <Searchbar class="searchFilter" @searchGame="searchNickname" />
       <DropdownFilters
         class="dropdownFilter"
         @mypositionFilter="mypositionFilter()"
@@ -344,10 +381,17 @@ export default {
               class="table__row"
               v-bind:style="[
                 !userObject.isFinished ? { background: '#5FC663' } : {},
+                userObject.nickname == userDetails.nickname
+                  ? { background: '#FA8072' }
+                  : {},
               ]"
               role="row"
             >
-              <div class="table__cell table__cell--favourite" role="gridcell">
+              <div
+                v-if="userObject.nickname != userDetails.nickname"
+                class="table__cell table__cell--favourite"
+                role="gridcell"
+              >
                 <button
                   class="favourite_button"
                   v-if="isFavourite(userObject.nickname)"
@@ -362,7 +406,17 @@ export default {
                 >
                   <i id="icon" class="far fa-star text-yellow-300 fa-2x"></i>
                 </button>
-                {{ i + 1 }}
+                {{ userObject.rank }}
+              </div>
+              <div
+                v-if="userObject.nickname == userDetails.nickname"
+                class="table__cell table__cell--favourite"
+                role="gridcell"
+              >
+                <button class="favourite_button">
+                  <i id="icon" class="fas fa-user text-black-300 fa-2x"></i>
+                </button>
+                {{ userObject.rank }}
               </div>
               <div class="table__cell table__cell--user" role="gridcell">
                 <div class="user__avatar">

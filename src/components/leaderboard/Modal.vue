@@ -77,7 +77,9 @@
             </div>
             <!--body-->
             <div class="relative p-6 flex-auto">
-              <div>Dane po prawej stronie to procentowa wartość ...</div>
+              <p>TIP: The percentages are the ratio of your best stats</p>
+              <p>to given player's stats.</p>
+              <br />
               <div class="divStars">
                 <p class="my-4 text-blueGray-500 text-lg leading-relaxed">
                   Best gathered stars: {{ gameDetail.gatheredStars }} =>

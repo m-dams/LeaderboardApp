@@ -20,7 +20,7 @@
     <button
       type="submit"
       class="relative right-8 top-1 mt-5 mr-4 mb-5"
-      @click="$emit('search', searchNickname)"
+      @click="$emit('searchGame', searchNickname)"
     >
       <svg
         class="text-gray-600 h-4 w-4 fill-current"

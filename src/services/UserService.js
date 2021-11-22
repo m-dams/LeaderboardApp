@@ -11,9 +11,6 @@ const apiClient = axios.create({
 });
 
 export default {
-  getUserNickname(nickname) {
-    return apiClient.get("/user/player/" + nickname);
-  },
   postLogin(url, email, password) {
     return apiClient.post(url, {
       email,
@@ -46,11 +43,6 @@ export default {
   },
   logout() {
     localStorage.removeItem("token");
-  },
-  getInitialUsers() {
-    return apiClient.get(
-      "/game/ranking-games?limit=20&offset=2&filterBy=enemiesKilled&sort=DESC&favourites=false"
-    );
   },
   getUserGames(limit, offset) {
     return apiClient.get(
@@ -89,6 +81,16 @@ export default {
         sort +
         "&favourites=" +
         favourites
+    );
+  },
+  getGameSearch(nickname, filterBy, range) {
+    return apiClient.get(
+      "/game/search-games?nickname=" +
+        nickname +
+        "&filterBy=" +
+        filterBy +
+        "&range=" +
+        range
     );
   },
 };
