@@ -126,20 +126,14 @@ export default {
     };
   },
   methods: {
-    notify_success: function () {
-      notify(
-        {
-          group: "Success",
-          title: "Success",
-          text: this.message,
-        },
-        2000
-      );
-    },
     reset_password: function () {
       UserService.postResetPassword(this.email)
         .then((response) => {
           console.log(response);
+          this.notify_success(
+            "Link for password reset has been sent to your email"
+          );
+          this.redirect_login();
         })
         .catch((err) => {
           this.error = err.message;
@@ -148,6 +142,16 @@ export default {
     },
     redirect_login: function () {
       router.push("Login");
+    },
+    notify_success: function (message) {
+      notify(
+        {
+          group: "Success",
+          title: "Success",
+          text: message,
+        },
+        3000
+      );
     },
   },
 };
