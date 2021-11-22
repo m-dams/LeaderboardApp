@@ -4,7 +4,7 @@ import { notify } from "notiwind";
 import { collapsed, toggleSidebar, sidebarWidth } from "./state";
 
 export default {
-  props: {},
+  props: { loggedIn: Boolean },
   components: { SidebarLink },
   setup() {
     return { collapsed, toggleSidebar, sidebarWidth };
@@ -15,6 +15,7 @@ export default {
     };
   },
   mounted() {
+    // this.logout();
     if (localStorage.getItem("token")) {
       this.componentKey = true;
     }
@@ -25,9 +26,8 @@ export default {
     }
   },
   methods: {
-    logout() {
+    logout: function () {
       localStorage.removeItem("token");
-      this.forceRerenderFalse();
       this.notify_generic("You have successfully logged out");
     },
     notify_generic: function (message) {
@@ -40,16 +40,12 @@ export default {
         3000
       );
     },
-    forceRerenderFalse() {
-      this.componentKey = false;
-      this.$forceUpdate();
-    },
   },
 };
 </script>
 
 <template>
-  <div class="sidebar" :style="{ width: sidebarWidth }" :key="componentKey">
+  <div class="sidebar" :style="{ width: sidebarWidth }" :key="loggedIn">
     <h1>
       <span v-if="collapsed">
         <div>Z</div>
@@ -59,25 +55,20 @@ export default {
       <span v-else>ZPI</span>
     </h1>
 
-    <SidebarLink
-      v-if="componentKey == false"
-      to="/login"
-      icon="fas fa-sign-in-alt"
+    <SidebarLink v-if="loggedIn == false" to="/login" icon="fas fa-sign-in-alt"
       >Login</SidebarLink
     >
-    <SidebarLink
-      v-if="componentKey == false"
-      to="/signup"
-      icon="fas fa-user-plus"
+    <SidebarLink v-if="loggedIn == false" to="/signup" icon="fas fa-user-plus"
       >Register</SidebarLink
     >
     <SidebarLink to="/leaderboard" icon="fas fa-crown">Leaderboard</SidebarLink>
-    <SidebarLink v-if="componentKey" to="/myprogress" icon="fas fa-chart-line"
+    <SidebarLink v-if="loggedIn" to="/myprogress" icon="fas fa-chart-line"
       >My progress</SidebarLink
     >
     <SidebarLink
-      v-if="componentKey"
+      v-if="loggedIn"
       @click.prevent="logout()"
+      @click="$emit('loginStatus')"
       to="/login"
       icon="fas fa-sign-out-alt"
       >Sign out</SidebarLink

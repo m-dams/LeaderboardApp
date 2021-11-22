@@ -184,6 +184,7 @@ export default {
       token: null,
       refreshToken: null,
       error: null,
+      status: true,
     };
   },
   methods: {
@@ -193,6 +194,7 @@ export default {
       const url = "http://localhost:8080/auth/login";
       await UserService.postLogin(url, email, password)
         .then((response) => {
+          this.emitter.emit("justLoggedIn", this.status);
           this.message = "Login successful";
           this.verified = response.data.verified;
           this.token = response.data.token;

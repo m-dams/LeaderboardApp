@@ -6,11 +6,17 @@ export default {
   data() {
     return {
       pullRefreshToken: null,
+      loggedIn: false,
     };
   },
   components: { Sidebar },
   setup() {
     return { sidebarWidth };
+  },
+  mounted() {
+    this.emitter.on("justLoggedIn", (status) => {
+      this.loggedIn = status;
+    });
   },
   created() {
     this.pullRefreshToken = setInterval(() => {
@@ -32,6 +38,13 @@ export default {
             console.log(error.response.data.error);
           }
         });
+    },
+    loginStatus: function () {
+      if (this.loggedIn == true) {
+        this.loggedIn = false;
+      } else {
+        this.loggedIn = true;
+      }
     },
   },
 };
@@ -241,7 +254,7 @@ export default {
       </div>
     </div>
   </NotificationGroup>
-  <Sidebar />
+  <Sidebar :loggedIn="loggedIn" @loginStatus="loginStatus()" />
   <div class="content" :style="{ 'margin-left': sidebarWidth }">
     <router-view />
   </div>
