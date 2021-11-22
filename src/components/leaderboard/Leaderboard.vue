@@ -327,13 +327,7 @@ export default {
     </div>
     <section class="board">
       <div class="container container--narrow" v-cloak>
-        <div class="loader v-cloak-visible">
-          <p>Let me load some data</p>
-        </div>
-        <div class="message message--error v-cloak-hidden" v-if="error">
-          Error: {{ error }}
-        </div>
-        <div class="table v-cloak-hidden" role="grid" v-else>
+        <div class="table v-cloak-hidden" role="grid">
           <div class="table__header table__header--sticky" role="row toolbar">
             <div class="table__cell table__cell--position" role="columnheader">
               Position
@@ -656,26 +650,6 @@ button:focus {
   width: 100%;
 }
 
-.message {
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 300;
-  margin: 2rem auto;
-  padding: 1rem;
-  text-align: center;
-  width: 50%;
-}
-
-.message--error {
-  background-color: #e53935;
-  border: 1px solid #d32f2f;
-}
-
-.loader {
-  display: none;
-  text-align: center;
-}
-
 .modal,
 .modal__overlay {
   bottom: 0;
@@ -751,14 +725,6 @@ button:focus {
     transform 0.3s cubic-bezier(0.6, 0.2, 0.6, 0.9);
 }
 
-[v-cloak] .v-cloak-visible {
-  display: block;
-}
-
-[v-cloak] .v-cloak-hidden {
-  display: none;
-}
-
 @media (min-width: 620px) {
   .table__cell--user {
     flex-basis: auto;
@@ -775,10 +741,6 @@ button:focus {
 
   .user__avatar {
     margin-right: 1rem;
-  }
-
-  .user__avatar--large {
-    margin-right: 0;
   }
 }
 </style>

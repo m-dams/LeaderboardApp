@@ -24,6 +24,11 @@ export default {
       password,
     });
   },
+  postResetPassword(email) {
+    return apiClient.post("/auth/reset-password", {
+      email,
+    });
+  },
   postAddToFavourites(nickname) {
     return apiClient.post("/user/add-to-favourites", {
       favouriteNickname: nickname,

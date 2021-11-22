@@ -61,7 +61,9 @@ export default {
     <SidebarLink v-if="loggedIn == false" to="/signup" icon="fas fa-user-plus"
       >Register</SidebarLink
     >
-    <SidebarLink to="/leaderboard" icon="fas fa-crown">Leaderboard</SidebarLink>
+    <SidebarLink v-if="loggedIn" to="/leaderboard" icon="fas fa-crown"
+      >Leaderboard</SidebarLink
+    >
     <SidebarLink v-if="loggedIn" to="/myprogress" icon="fas fa-chart-line"
       >My progress</SidebarLink
     >

@@ -223,9 +223,6 @@ export default {
       required: true,
     },
   },
-  created() {
-    // if (this.gameDetail !== null) this.gameDetails = this.gameDetail;
-  },
   data() {
     return {
       gatheredStarsR: 1,

@@ -62,43 +62,13 @@
                           w-full
                         "
                         placeholder="Email"
+                        v-model="email"
                         style="transition: all 0.15s ease 0s"
                       />
                     </div>
-
-                    <div class="relative w-full mb-3">
-                      <label
-                        class="
-                          block
-                          uppercase
-                          text-gray-700 text-xs
-                          font-bold
-                          mb-2
-                        "
-                        for="grid-password"
-                        >New Password</label
-                      ><input
-                        type="password"
-                        class="
-                          border-0
-                          px-3
-                          py-3
-                          placeholder-gray-400
-                          text-gray-700
-                          bg-white
-                          rounded
-                          text-sm
-                          shadow
-                          focus:outline-none focus:ring
-                          w-full
-                        "
-                        placeholder="New password"
-                        style="transition: all 0.15s ease 0s"
-                      />
-                    </div>
-                    <div></div>
                     <div class="text-center mt-6">
                       <button
+                        @click="reset_password()"
                         class="
                           bg-gray-900
                           text-white
@@ -131,7 +101,7 @@
                   class="w-full text-center"
                   @click.prevent="redirect_login()"
                 >
-                  <a class="text-black-300"
+                  <a class="text-black-300" href="#pablo"
                     ><small>Do you want to log in?</small></a
                   >
                 </div>
@@ -146,9 +116,15 @@
 <script>
 import { notify } from "notiwind";
 import router from "../router";
+import UserService from "../services/UserService";
 export default {
   name: "login-page",
   components: {},
+  data() {
+    return {
+      email: "",
+    };
+  },
   methods: {
     notify_success: function () {
       notify(
@@ -159,6 +135,16 @@ export default {
         },
         2000
       );
+    },
+    reset_password: function () {
+      UserService.postResetPassword(this.email)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          this.error = err.message;
+          console.error(err.message);
+        });
     },
     redirect_login: function () {
       router.push("Login");
