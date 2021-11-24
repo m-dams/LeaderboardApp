@@ -1,18 +1,33 @@
 import axios from "axios";
 
-const token = localStorage.getItem("token");
-const refreshToken = localStorage.getItem("refreshToken");
+var token = localStorage.getItem("token");
+if (token) {
+  token = token.substring(1, token.length - 1);
+}
 
-const apiClient = axios.create({
+var refreshToken = localStorage.getItem("refreshToken");
+if (token) {
+  token = token.substring(1, token.length - 1);
+}
+
+var apiClient = axios.create({
   baseURL: "http://localhost:8080",
   headers: {
-    Authorization: "Bearer " + token.substring(1, token.length - 1),
+    Authorization: "Bearer " + token,
   },
 });
 
 export default {
-  postLogin(url, email, password) {
-    return apiClient.post(url, {
+  setHeader(tokenn) {
+    apiClient = axios.create({
+      baseURL: "http://localhost:8080",
+      headers: {
+        Authorization: "Bearer " + tokenn,
+      },
+    });
+  },
+  postLogin(email, password) {
+    return apiClient.post("/auth/login", {
       email,
       password,
     });
@@ -41,12 +56,11 @@ export default {
   },
   postRefreshToken() {
     return apiClient.post("/auth/refresh-token", {
-      refreshToken: localStorage
-        .getItem("refreshToken")
-        .substring(1, refreshToken.length - 1),
+      refreshToken: refreshToken,
     });
   },
   logout() {
+    delete axios.defaults.headers.common["Authorization"];
     localStorage.removeItem("token");
   },
   getUserGames(limit, offset) {

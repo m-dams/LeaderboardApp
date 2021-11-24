@@ -191,16 +191,17 @@ export default {
     sign_in: async function () {
       const email = document.getElementById("email-input").value;
       const password = document.getElementById("password-input").value;
-      const url = "http://localhost:8080/auth/login";
-      await UserService.postLogin(url, email, password)
+      await UserService.postLogin(email, password)
         .then((response) => {
           this.emitter.emit("justLoggedIn", this.status);
           this.message = "Login successful";
           this.verified = response.data.verified;
+          console.log(response.data.token);
           this.token = response.data.token;
           this.refreshToken = response.data.refreshToken;
           if (response.data.token) {
-            localStorage.setItem("token", JSON.stringify(response.data.token));
+            localStorage.setItem("token", JSON.stringify(this.token));
+            UserService.setHeader(this.token);
           }
           if (response.data.refreshToken) {
             localStorage.setItem(
