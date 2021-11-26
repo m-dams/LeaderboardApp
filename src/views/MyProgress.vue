@@ -18,7 +18,7 @@
     @changeToKilled="changeStatistic('Killed enemies')"
     @changeToTotalScore="changeStatistic('Points gathered')"
     @changeToLifePoints="changeStatistic('Gathered life points')"
-    @changeToKilledByMelee="changeStatistic('Emeies killed by mellee')"
+    @changeToKilledByMelee="changeStatistic('Enemies killed by melee')"
     @changeToKilledFromDistance="
       changeStatistic('Enemies killed from distance')
     "
@@ -205,9 +205,7 @@ export default {
           this.value = this.allGames.map((e) => e.gatheredStars);
           break;
         case "Killed enemies":
-          this.value = this.allGames.map(
-            (e) => e.bestType1EnemiesKilledByMelee
-          );
+          this.value = this.allGames.map((e) => e.enemiesType1KilledByMelee);
           break;
         case "Points gathered":
           this.value = this.allGames.map((e) => e.totalScore);
@@ -215,14 +213,12 @@ export default {
         case "Gathered life points":
           this.value = this.allGames.map((e) => e.gatheredLifePoints);
           break;
-        case "Emeies killed by mellee":
-          this.value = this.allGames.map(
-            (e) => e.bestType1EnemiesKilledByMelee
-          );
+        case "Enemies killed by melee":
+          this.value = this.allGames.map((e) => e.enemiesType1KilledByMelee);
           break;
         case "Enemies killed from distance":
           this.value = this.allGames.map(
-            (e) => e.bestType1EnemiesKilledFromDistance
+            (e) => e.enemiesType1KilledFromDistance
           );
           break;
         case "Game duration[s]":
