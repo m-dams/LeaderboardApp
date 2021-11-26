@@ -19,6 +19,11 @@ export default {
     });
   },
   created() {
+    var token = localStorage.getItem("token");
+    if (token) {
+      this.loggedIn = true;
+      UserService.setHeader(token);
+    }
     this.pullRefreshToken = setInterval(() => {
       this.fetchToken();
     }, 1000000);
@@ -46,6 +51,9 @@ export default {
         this.loggedIn = true;
       }
     },
+  },
+  unmounted() {
+    clearInterval(this.pullRefreshToken);
   },
 };
 </script>

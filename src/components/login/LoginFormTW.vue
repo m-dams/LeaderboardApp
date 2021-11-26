@@ -181,7 +181,7 @@ export default {
     return {
       message: null,
       verified: false,
-      token: null,
+      token: "  ",
       refreshToken: null,
       error: null,
       status: true,
@@ -196,11 +196,12 @@ export default {
           this.emitter.emit("justLoggedIn", this.status);
           this.message = "Login successful";
           this.verified = response.data.verified;
-          console.log(response.data.token);
           this.token = response.data.token;
+          console.log(this.token);
           this.refreshToken = response.data.refreshToken;
           if (response.data.token) {
-            localStorage.setItem("token", JSON.stringify(this.token));
+            localStorage.setItem("token", this.token);
+            console.log(localStorage.getItem("token"));
             UserService.setHeader(this.token);
           }
           if (response.data.refreshToken) {

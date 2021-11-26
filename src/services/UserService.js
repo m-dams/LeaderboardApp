@@ -1,32 +1,18 @@
 import axios from "axios";
 
-var token = localStorage.getItem("token");
-if (token) {
-  token = token.substring(1, token.length - 1);
-}
-
 var refreshToken = localStorage.getItem("refreshToken");
-if (token) {
-  token = token.substring(1, token.length - 1);
-}
 
 var apiClient = axios.create({
   baseURL: "http://localhost:8080",
-  headers: {
-    Authorization: "Bearer " + token,
-  },
 });
 
 export default {
   setHeader(tokenn) {
-    apiClient = axios.create({
-      baseURL: "http://localhost:8080",
-      headers: {
-        Authorization: "Bearer " + tokenn,
-      },
-    });
+    apiClient.defaults.headers.common["Authorization"] = "Bearer " + tokenn;
   },
   postLogin(email, password) {
+    apiClient.defaults.headers.common["Authorization"] =
+      localStorage.getItem("token");
     return apiClient.post("/auth/login", {
       email,
       password,

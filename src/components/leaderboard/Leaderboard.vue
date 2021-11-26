@@ -305,6 +305,11 @@ export default {
   setup() {
     return { collapsed, toggleSidebar };
   },
+  computed: {
+    filteredUsers: function () {
+      return this.users.filter((val) => val !== undefined && val !== null);
+    },
+  },
 };
 </script>
 
@@ -372,7 +377,7 @@ export default {
             v-on:enter="enter"
           >
             <div
-              v-for="(userObject, i) in users"
+              v-for="(userObject, i) in filteredUsers"
               :key="i"
               :data-index="i"
               class="table__row"
