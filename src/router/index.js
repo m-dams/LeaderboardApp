@@ -9,7 +9,7 @@ const routes = [
   {
     path: "/leaderboard",
     name: "Leaderboard",
-    component: () => import("../views/Leaderboard.vue"),
+    component: () => import("../components/leaderboard/Leaderboard.vue"),
   },
   {
     path: "/myprogress",
