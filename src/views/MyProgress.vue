@@ -141,11 +141,15 @@
 import Chart from "../components/chart/Chart";
 import UserService from "../services/UserService";
 import Dropdown from "../components/chart/DropdownOptions";
+import { collapsed, toggleSidebar } from "@/components/sidebar/state";
 export default {
   name: "MyProgress",
   components: {
     options: Dropdown,
     highcharts: Chart,
+  },
+  setup() {
+    return { collapsed, toggleSidebar };
   },
   data() {
     return {

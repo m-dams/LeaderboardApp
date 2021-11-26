@@ -1,5 +1,6 @@
 <script>
 import UserService from "../../services/UserService.js";
+import { collapsed, toggleSidebar } from "../sidebar/state";
 import Dropdown from "./Dropdown";
 import DropdownFilters from "./DropdownFilters";
 import Modal from "./Modal";
@@ -11,7 +12,7 @@ export default {
     return {
       criteriumName: "Total Score",
       criterium: "totalScore",
-      limitF: 3,
+      limitF: 8,
       offsetF: 0,
       filterByF: "totalScore",
       sortF: "ASC",
@@ -217,7 +218,7 @@ export default {
       this.notify_generic("Filter has been changed to MY POSITION");
     },
     removeFilter: async function () {
-      this.limitF = 3;
+      this.limitF = 8;
       this.offsetF = 0;
       this.filterByF = "totalScore";
       this.sortF = "ASC";
@@ -246,8 +247,7 @@ export default {
           .then((response) => {
             console.log("search user: " + searchNickname);
             this.users = response.data;
-            this.limitF = 3;
-            this.offsetF = this.users[0].gameId + 1;
+            this.offsetF = this.users[0].rank;
           })
           .catch((error) => {
             if (error.response) {
@@ -255,7 +255,7 @@ export default {
             }
           });
       } else {
-        this.limitF = 3;
+        this.limitF = 8;
         this.offsetF = 0;
         await this.fetchLeaderboardData();
       }
@@ -301,6 +301,9 @@ export default {
   },
   mounted() {
     this.getNextUser();
+  },
+  setup() {
+    return { collapsed, toggleSidebar };
   },
 };
 </script>
