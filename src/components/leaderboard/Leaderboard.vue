@@ -17,7 +17,7 @@ export default {
       filterByF: "totalScore",
       sortF: "ASC",
       favouritesF: false,
-      users: [{ nickname: "" }],
+      users: [{ nickname: "", totalScore: 0, duartionTime: 0 }],
       activeGames: [],
       activeUser: 0,
       error: null,
@@ -31,11 +31,100 @@ export default {
       pullingLeaderboard: null,
       sortBy: "totalScore",
       favourites: [],
+      closestFetch: Date.now(),
+      incrementIntervals: [],
+      leaderboardFetchInterval: 30000,
     };
   },
   name: "index",
   components: { Modal, SortButton, Searchbar, DropdownFilters, Dropdown },
   methods: {
+    incrementScore: function () {
+      this.activeGames.forEach((element) => {
+        var currentIndex = this.findGameIndex(element);
+        try {
+          // var avgPointsRatio = Math.floor(
+          //   this.users[currentIndex].totalScore /
+          //     this.users[currentIndex].duartionTime
+          // );
+          var avgPointsRatio = 10;
+          var intervalsNumber = Math.floor(
+            (this.users[currentIndex - 1].totalScore -
+              this.users[currentIndex].totalScore) /
+              avgPointsRatio /
+              2
+          );
+          console.log(intervalsNumber);
+          try {
+            clearInterval(this.incrementIntervals[element]);
+          } catch (e) {
+            console.log();
+          }
+          this.incrementIntervals[element] = setInterval(() => {
+            try {
+              if (
+                this.users[currentIndex].totalScore + avgPointsRatio * 2 <
+                this.users[currentIndex - 1].totalScore
+              ) {
+                this.users[currentIndex].totalScore += avgPointsRatio * 2;
+              }
+            } catch (e) {
+              console.log();
+            }
+          }, 2000);
+        } catch (e) {
+          console.log();
+        }
+      });
+    },
+    prediction: function () {
+      var predictionFetchTime = null;
+      this.activeGames.forEach((element) => {
+        var currentIndex = this.findGameIndex(element);
+        try {
+          var avgPointsRatio = Math.floor(
+            this.users[currentIndex].totalScore /
+              this.users[currentIndex].duartionTime
+          );
+          var timeDifference = Math.floor(
+            (this.users[currentIndex - 1].totalScore -
+              this.users[currentIndex].totalScore) /
+              avgPointsRatio
+          );
+          if (Date.now() + timeDifference * 1000 < this.closestFetch) {
+            predictionFetchTime = Date.now() + timeDifference * 1000;
+          }
+        } catch (e) {
+          console.log();
+        }
+      });
+      if (predictionFetchTime) {
+        this.leaderboardFetchInterval = this.closestFetch - Date.now();
+        console.log("next fetch - ileś");
+        clearInterval(this.pullingLeaderboard);
+        this.pullingLeaderboard = setInterval(() => {
+          this.closestFetch = Date.now() + this.leaderboardFetchInterval;
+          this.fetchLeaderboardData();
+        }, this.leaderboardFetchInterval);
+      } else {
+        console.log("next fetch - 30000");
+        this.leaderboardFetchInterval = 30000;
+        clearInterval(this.pullingLeaderboard);
+        this.pullingLeaderboard = setInterval(() => {
+          this.closestFetch = Date.now() + this.leaderboardFetchInterval;
+          this.fetchLeaderboardData();
+        }, this.leaderboardFetchInterval);
+      }
+      this.incrementScore();
+    },
+    findGameIndex: function (gameId) {
+      for (var i = 0; i < this.users.length; i++) {
+        if (this.users[i].gameId == gameId) {
+          return i;
+        }
+      }
+      return 0;
+    },
     getNextUser() {
       window.onscroll = () => {
         let bottomOfWindow =
@@ -113,6 +202,7 @@ export default {
           console.error(err.message);
         });
       console.log("Active game id's: " + this.activeGames);
+      this.prediction();
     },
     closeModal: function () {
       this.showModal = false;
@@ -292,9 +382,6 @@ export default {
         console.error(err.message);
       });
     this.fetchLeaderboardData();
-    this.pullingLeaderboard = setInterval(() => {
-      this.fetchLeaderboardData();
-    }, 30000);
   },
   beforeUnmount() {
     clearInterval(this.pullingLeaderboard);
